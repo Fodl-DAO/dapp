@@ -1,0 +1,55 @@
+<app-dialog [dialogRef]="dialogRef">
+    <div mat-dialog-title>{{ data.title }}</div>
+
+    <div class="relative app-transaction">
+        <ng-container *ngIf="!interval">
+            <div *ngIf="step === 'approve'">
+                Please approve spending
+
+                <strong>
+                    {{ approveAmount }}
+                    {{ getAssetSymbol(data.approve.token) }}
+                </strong>
+
+                <ng-container *ngIf="getAssetSymbol(data.approve.token)">
+                    to be used as principal investment
+                </ng-container>
+
+                .
+            </div>
+
+            <div *ngIf="step === 'action'">
+                {{ data.actionDescription }}
+            </div>
+        </ng-container>
+
+        <div *ngIf="interval && transactionHash" class="text-center">
+            <p>Waiting for a transaction to be confirmed.</p>
+
+            <a [attr.href]="getBlockExplorerLink()" class="block my-8 mx-auto" target="_blank">
+                <button mat-button class="primary">View On {{ getBlockExplorerName() }}</button>
+            </a>
+        </div>
+
+        <div *ngIf="step === 'done' && transactionHash && !interval" class="text-center">
+            <p *ngIf="!error">Transaction confirmed!</p>
+
+            <a [attr.href]="getBlockExplorerLink()" class="block my-8 mx-auto" target="_blank">
+                <button mat-button class="primary">View On {{ getBlockExplorerName() }}</button>
+            </a>
+        </div>
+
+        <mat-progress-spinner
+            *ngIf="!error && (interval || step != 'done')"
+            class="mx-auto my-16"
+            color="accent"
+            mode="indeterminate"
+        ></mat-progress-spinner>
+
+        <div *ngIf="step === 'done' && error" class="flex my-6"></div>
+
+        <div *ngIf="error" class="bg-red-500 p-8 -m-6 text-center">
+            {{ error }}
+        </div>
+    </div>
+</app-dialog>

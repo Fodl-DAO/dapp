@@ -1,0 +1,28 @@
+<div class="flex items-center pl-3">
+    <app-icon-pair
+        size="large"
+        [asset1]="supplyAsset"
+        [assetName1]="supplyAssetName"
+        assetDescription1="Supply Asset"
+        [asset2]="borrowAsset"
+        [assetName2]="borrowAssetName"
+        assetDescription2="Borrow Asset"
+    ></app-icon-pair>
+
+    <div class="flex flex-col ml-10 w-32">
+        <div class="text-base font-semibold mb-2">
+            {{ supplyAssetName }}/{{ borrowAssetName }}
+        </div>
+
+        <div class="flex items-center">
+            <app-icon-platform
+                class="flex w-6 mr-2 transform scale-75"
+                [platformName]="platformName"
+            ></app-icon-platform>
+
+            <div class="flex w-24 text-grey">
+                {{ platformName }}
+            </div>
+        </div>
+    </div>
+</div>

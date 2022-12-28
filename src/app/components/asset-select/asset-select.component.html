@@ -1,0 +1,41 @@
+<div class="flex w-full items-center justify-center mb-8">
+    <app-icon-asset
+        class="flex w-12 mx-4 items-center scale-150"
+        [asset]="asset.address"
+        [platform]="asset.platformAddress"
+        [platformName]="asset.platformName"
+    ></app-icon-asset>
+
+    <div class="flex grow">
+        <mat-select
+            [value]="asset.platformAddress + asset.address"
+            (valueChange)="assetChange.emit(findAsset($event))"
+        >
+            <mat-select-trigger class="text-base font-semibold">
+                {{ asset.name }}
+            </mat-select-trigger>
+
+            <mat-option
+                *ngFor="let asset of assets"
+                [value]="asset.platformAddress + asset.address"
+            >
+                <div class="flex items-center w-full">
+                    <app-icon-asset
+                        class="flex w-8 mx-4 items-center"
+                        [asset]="asset.address"
+                        [platform]="asset.platformAddress"
+                        [platformName]="asset.platformName"
+                    ></app-icon-asset>
+
+                    <div class="flex flex-col ml-4">
+                        <span class="flex w-full">{{ asset.name }}</span>
+
+                        <span *ngIf="markets" class="flex w-full text-xs text-blue-400">
+                            {{ getWalletBalance(asset.address) }}
+                        </span>
+                    </div>
+                </div>
+            </mat-option>
+        </mat-select>
+    </div>
+</div>

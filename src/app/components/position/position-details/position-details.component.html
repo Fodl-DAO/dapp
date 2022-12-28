@@ -1,0 +1,366 @@
+<div class="flex text-base font-semibold mb-8">
+    {{ edit ? 'Estimated' : '' }} Position Details
+</div>
+
+<div class="flex my-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Principal Investment</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-72">
+                <h3 class="font-semibold mb-2">Principal Investment</h3>
+
+                The amount invested by the user. This value is updated every
+                time funds are deposited or withdrawn from the position.
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        <div clas="flex-col">
+            <div class="flex">
+                <app-icon-asset
+                    class="w-6 mr-2"
+                    [asset]="position.supplyMarket.assetAddress"
+                ></app-icon-asset>
+
+                <ng-container *ngIf="positionDetails.principalValue">
+                    {{ positionDetails.principalValue | formatValue }}
+                    {{ position.supplyMarket.assetSymbol }}
+                </ng-container>
+
+                <ng-container *ngIf="!positionDetails.principalValue">
+                    N / A
+                </ng-container>
+            </div>
+
+            <div
+                *ngIf="positionDetails.principalValueUsd"
+                class="flex justify-end opacity-50"
+            >
+                ~${{ positionDetails.principalValueUsd || 0 | formatValue }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex my-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Position Value</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-72">
+                <h3 class="font-semibold mb-2">Position Value</h3>
+
+                Current position value estimated based on the underlying
+                platform's price oracles.
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        <div clas="flex-col">
+            <div class="flex">
+                <app-icon-asset
+                    class="w-6 mr-2"
+                    [asset]="position.supplyMarket.assetAddress"
+                ></app-icon-asset>
+
+                {{ positionDetails.positionValue || 0 | formatValue }}
+                {{ position.supplyMarket.assetSymbol }}
+            </div>
+
+            <div class="flex justify-end opacity-50">
+                ~${{ positionDetails.positionValueUsd || 0 | formatValue }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex my-6" *ngIf="positionDetails.pnl">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">PnL</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h3 class="font-semibold mb-2">PnL</h3>
+
+                <p class="mb-2">PnL = Position Value / Principal Value - 1.</p>
+
+                <p>
+                    The position value fluctuates largely due to price
+                    movements, but also due to interest accrued/owed on the
+                    assets supplied/borrowed on the underlying lending platform.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="flex grow items-center justify-end text-base relative"
+        [class.text-red-400]="
+            positionDetails.positionValueUsd > 0.1 && positionDetails.pnl < 0
+        "
+    >
+
+        <ng-container
+            *ngIf="
+                positionDetails.positionValueUsd > 0.1 ||
+                positionDetails.pnl.toString() !== 'Infinity'
+            ">
+            {{ positionDetails.pnl | formatValue }}%
+        </ng-container>
+
+        <ng-container
+            *ngIf="
+                positionDetails.positionValueUsd < 0.1 ||
+                positionDetails.pnl.toString() === 'Infinity'
+            ">
+            N / A
+        </ng-container>
+    </div>
+</div>
+
+<hr class="border-pink opacity-50 my-6" />
+
+<div class="flex my-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Supplying</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h3 class="font-semibold mb-2">Supplying</h3>
+
+                <p class="mb-2">
+                    The collateral supplied to the underlying lending platform.
+                </p>
+
+                <p>
+                    The daily interest accrued on this amount is:
+                    {{
+                        (position.supplyMarket.supplyAPR / 365) * 100
+                            | formatValue
+                    }}%
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        <div clas="flex-col">
+            <div class="flex">
+                <app-icon-asset
+                    class="w-6 mr-2"
+                    [asset]="position.supplyMarket.assetAddress"
+                ></app-icon-asset>
+
+                {{ positionDetails.supplyAmount | formatValue }}
+                {{ position.supplyMarket.assetSymbol }}
+            </div>
+
+            <div class="flex justify-end opacity-50">
+                ~${{ positionDetails.supplyAmountUsd || 0 | formatValue }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex my-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Borrowing</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip above !w-96">
+                <h3 class="font-semibold mb-2">Borrowing</h3>
+
+                <p class="mb-2">The debt to the underlying lending platform.</p>
+
+                <p>
+                    The daily interest owed on this amount is:
+                    {{
+                        (position.borrowMarket.borrowAPR / 365) * 100
+                            | formatValue
+                    }}%
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        <div clas="flex-col">
+            <div class="flex">
+                <app-icon-asset
+                    class="w-6 mr-2"
+                    [asset]="position.borrowMarket.assetAddress"
+                ></app-icon-asset>
+
+                {{ positionDetails.borrowAmount | formatValue }}
+                {{ position.borrowMarket.assetSymbol }}
+            </div>
+
+            <div class="flex justify-end opacity-50">
+                ~${{ positionDetails.borrowAmountUsd || 0 | formatValue }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex my-6" *ngIf="positionDetails.borrowLimitUsage">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Borrow Limit Usage</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip above !w-96">
+                <h3 class="font-semibold mb-2">Borrow Limit Usage</h3>
+
+                <p class="mb-2">
+                    Borrow Limit Usage = Borrow Value / (Supply Value * Supply
+                    Collateral Factor)
+                </p>
+
+                <p class="mb-2">
+                    {{ position.supplyMarket.assetSymbol }} Collateral Factor =
+                    {{
+                        position.supplyMarket.collateralFactor * 100
+                            | formatValue
+                    }}%
+                </p>
+
+                <p>
+                    At 100% borrow limit usage the position can be liquidated on
+                    the underlying platform by anyone.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div
+        class="flex grow items-center justify-end text-base relative"
+        [class.text-red-400]="positionDetails.borrowLimitUsage * 100 >= 95"
+    >
+        {{ positionDetails.borrowLimitUsage * 100 | formatValue }}%
+    </div>
+</div>
+
+<hr class="border-pink opacity-50 my-6" />
+
+<div class="flex mt-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base">Net Native APR</span>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip above !w-96">
+                <h3 class="font-semibold mb-2">Net Native APR</h3>
+
+                <p class="mb-2">
+                    Net native APR = (Leverage + 1) * SupplyAPR - Leverage *
+                    BorrowAPR
+                </p>
+
+                <p>
+                    Supply {{ position.supplyMarket.assetSymbol }} APR =
+                    {{
+                        position.supplyMarket.supplyAPR * 100 | formatValue
+                    }}%
+                </p>
+
+                <p class="mb-2">
+                    Borrow {{ position.borrowMarket.assetSymbol }} APR =
+                    {{
+                        position.borrowMarket.borrowAPR * 100 | formatValue
+                    }}%
+                </p>
+
+                <p>
+                    The APR resulting from the autocompounding interest accrued
+                    and owed on the supplied and borrowed assets.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        {{ positionDetails.nativeApr | formatValue }}%
+    </div>
+</div>
+
+<div *ngIf="positionDetails.distributionApr" class="flex mt-6">
+    <div class="flex items-start">
+        <span class="opacity-50 text-base"
+            >{{ position.supplyMarket.platform.name }} APR</span
+        >
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip above !w-[28rem]">
+                <h3 class="font-semibold mb-2">
+                    {{ position.supplyMarket.platform.name }} APR
+                </h3>
+
+                <p class="mb-2">
+                    {{ position.supplyMarket.platform.name }} APR = (Leverage +
+                    1) * SupplyDistributionAPR + Leverage *
+                    BorrowDistributionAPR
+                </p>
+
+                <p>
+                    {{ position.supplyMarket.platform.name }} Supply
+                    {{ position.supplyMarket.assetSymbol }} Distribution APR =
+                    {{
+                        position.supplyMarket.supplyRewardsAPR * 100
+                            | formatValue
+                    }}%
+                </p>
+
+                <p>
+                    {{ position.borrowMarket.platform.name }} Borrow
+                    {{ position.borrowMarket.assetSymbol }} Distribution APR =
+                    {{
+                        position.borrowMarket.borrowRewardsAPR * 100
+                            | formatValue
+                    }}%
+                </p>
+
+                <p class="mt-2">
+                    {{ position.supplyMarket.platform.name }} rewards suppliers
+                    and borrowers for providing and utilizing their markets.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex grow items-center justify-end text-base relative">
+        {{ positionDetails.distributionApr * 100 | formatValue }}%
+    </div>
+</div>

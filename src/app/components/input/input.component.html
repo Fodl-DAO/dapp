@@ -1,0 +1,50 @@
+<div
+    class="app-number-input flex items-center px-2 rounded-lg w-full"
+    [ngClass]="[
+        invalid ? 'bg-error' : 'bg-app-number-input',
+        type === 'default' || type === 'buttons' ? 'max-h-10' : 'max-h-8'
+    ]"
+>
+    <input
+        matInput
+        appFormatInput
+        type="text"
+        [(ngModel)]="value"
+        (ngModelChange)="onChange($event)"
+        [symbol]="symbol"
+        [placeholder]="placeHolder"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [name]="name"
+        [ngClass]="textAlign === 'left' ? 'text-start' : 'text-right'"
+        class="
+            h-10
+            bg-transparent
+            font-normal
+            text-lg
+            outline-none
+            border-none
+            w-full
+        "
+    />
+
+    <ng-container *ngIf="type === 'buttons'">
+        <div class="flex flex-col items-center">
+            <button (click)="handleOnIncrease()" [disabled]="disabled">
+                <mat-icon>arrow_drop_up</mat-icon>
+            </button>
+
+            <button (click)="handleOnDecrease()" [disabled]="disabled">
+                <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'asset'">
+        <app-icon-asset
+            class="w-5"
+            [asset]="asset"
+        >
+        </app-icon-asset>
+    </ng-container>
+</div>

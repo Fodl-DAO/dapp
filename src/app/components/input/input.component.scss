@@ -1,0 +1,44 @@
+@import '/src/styles/colors';
+
+.app-number-input {
+    input {
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            @apply m-0;
+            -webkit-appearance: none;
+        }
+
+        &[type='number'] {
+            -moz-appearance: textfield;
+        }
+
+        &:focus {
+            @apply ring-transparent;
+        }
+    }
+
+    button {
+        @apply h-5;
+        padding: 0 !important;
+
+        &:first-child .mat-icon {
+            line-height: 1.8rem;
+        }
+
+        &:last-child .mat-icon {
+            line-height: 0.9rem;
+        }
+
+        .mat-icon {
+            @apply h-5 w-5 text-xl opacity-20;
+        }
+
+        &:hover .mat-icon {
+            @apply transition ease-in-out duration-300 opacity-90;
+        }
+    }
+}
+
+.bg-app-number-input {
+    background-color: rgba($background-color, 0.2);
+}

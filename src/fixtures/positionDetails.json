@@ -1,0 +1,15 @@
+{
+    "principalValue": 0,
+    "principalValueUsd": 0,
+    "positionValue": 0,
+    "positionValueUsd": 0,
+    "pnl": 0,
+    "pnlChange": 0,
+    "supplyAmount": 0,
+    "supplyAmountUsd": 0,
+    "borrowAmount": 0,
+    "borrowAmountUsd": 0,
+    "borrowLimitUsage": 0,
+    "apr": 0,
+    "distributionApr": 0
+}

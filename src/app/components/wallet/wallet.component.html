@@ -1,0 +1,31 @@
+<div *ngIf="ethereumService.account$ | async">
+    <button
+        mat-button
+        class="has-tooltip !pl-2"
+        [autofocus]="false"
+        (click)="openWalletDialog()"
+    >
+        <img src="/assets/user.svg" class="inline w-5" />
+
+        <span class="tooltip below">
+            Connected wallet: {{ ethereumService.account$ | async }}
+        </span>
+
+        {{ ethereumService.account$ | async | slice: 0:5 }}...{{
+            ethereumService.account$ | async | slice: -3
+        }}
+    </button>
+</div>
+
+<div *ngIf="!(ethereumService.account$ | async)">
+    <button
+        mat-button
+        class="has-tooltip"
+        [autofocus]="false"
+        (click)="ethereumService.connect()"
+    >
+        <span class="tooltip below">Connect Wallet</span>
+
+        Connect Wallet
+    </button>
+</div>

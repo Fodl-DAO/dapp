@@ -1,0 +1,31 @@
+<div class="relative flex mt-8 mb-2 mx-2">
+    <app-big-number-input
+        [(value)]="amount"
+        [decimals]="18"
+        [placeHolder]="'Enter amount'"
+        [textAlign]="'center'"
+    >
+    </app-big-number-input>
+
+    <small class="button-max text-xs absolute right-0 -top-6" (click)="setMax()">
+        <span>Max:</span> {{ userBalance }}
+    </small>
+</div>
+
+<div *ngIf="!isAmountValid" class="flex mb-4 mx-2 text-red-400">
+    <mat-icon class="text-red-400 mr-1"> error </mat-icon>
+    <p class="text-sm leading-6">
+        {{ errorText }}
+    </p>
+</div>
+
+<div class="flex justify-center mt-4 mb-8 mx-2">
+    <button
+        mat-button
+        class="secondary w-full"
+        (click)="action()"
+        [disabled]="isAmountButtonDisabled"
+    >
+        {{ buttonText }}
+    </button>
+</div>

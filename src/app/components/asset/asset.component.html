@@ -1,0 +1,12 @@
+<div class="flex w-48 px-6 pb-6 items-center">
+    <app-icon-asset
+        class="flex scale-150"
+        [asset]="asset.address"
+        [platform]="asset.platformAddress"
+        [platformName]="asset.platformName"
+    ></app-icon-asset>
+
+    <div class="flex text-base font-semibold">
+        {{ asset.name }}
+    </div>
+</div>

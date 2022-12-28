@@ -1,0 +1,22 @@
+@import '../../../styles/colors';
+@import '../../../styles/variables';
+
+.app-header {
+    @apply fixed w-full z-50;
+
+    &__navigation {
+        @apply max-w-7xl;
+    }
+}
+
+@media (min-width: 1620px) {
+    .app-header__navigation {
+        @apply mx-auto;
+    }
+}
+
+@media (max-width: 1620px) {
+    .app-header__navigation {
+        @apply ml-44;
+    }
+}

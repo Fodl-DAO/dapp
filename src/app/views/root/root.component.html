@@ -1,0 +1,17 @@
+<div
+    *ngIf="!(foldingService.error$ | async)"
+    class="flex items-center justify-center h-[50vh]"
+>
+    <mat-progress-spinner
+        class="flex"
+        color="accent"
+        mode="indeterminate"
+    ></mat-progress-spinner>
+</div>
+
+<div
+    *ngIf="foldingService.error$ | async"
+    class="text-4xl w-full text-center my-40"
+>
+    {{ foldingService.error$ | async }}
+</div>

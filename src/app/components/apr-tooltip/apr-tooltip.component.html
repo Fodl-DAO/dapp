@@ -1,0 +1,31 @@
+<div class="flex w-72">
+    <div class="w-60 font-bold">
+        {{ foldingMarket.supplyMarket.assetSymbol }} APR:
+    </div>
+
+    <div class="flex-1 text-right">{{ marketApr | formatValue }}%</div>
+</div>
+
+<div class="flex w-72">
+    <div class="w-60 font-bold">
+        {{ foldingMarket.supplyMarket.rewardTokenSymbol }} Distribution APR:
+    </div>
+
+    <div class="flex-1 text-right">
+        {{ marketDistributionApr | formatValue }}%
+    </div>
+</div>
+
+<div class="flex w-72">
+    <div class="w-60 font-bold">
+        Net APR:
+    </div>
+
+    <div class="flex-1 text-right">{{ netApr | formatValue }}%</div>
+</div>
+
+<ng-container *ngIf="!leverage">
+    <hr class="my-4 opacity-25" />
+
+    <div class="w-full opacity-75">Assuming max leverage</div>
+</ng-container>

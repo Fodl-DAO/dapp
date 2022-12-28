@@ -1,0 +1,118 @@
+<div class="has-tooltip cursor-pointer w-32">
+    <app-borrow-limit-bar
+        [collateralUsageFactorLeftOffset]="collateralUsageFactorLeftOffset"
+        [collateralUsageLimitLeftOffset]="collateralUsageLimitLeftOffset"
+    ></app-borrow-limit-bar>
+
+    <div
+        class="tooltip w-96"
+        [ngClass]="tooltipPosition ? tooltipPosition : ''"
+    >
+        <h1 class="font-semibold mb-2">Liquidation Event</h1>
+
+        <p class="text-sm">
+            Liquidation Event happens at
+            <span class="font-semibold"
+                >{{ liquidationPrice }} {{ liquidationExchange }}</span
+            >.<br />
+            Right now market is at
+            <span class="font-semibold"
+                >{{ currentPrice }} {{ currentPriceExchange }}</span
+            >.<br />
+        </p>
+
+        <hr class="my-4 opacity-10" />
+
+        <div class="relative mx-[20%] w-[60%] h-32">
+            <div
+                class="
+                    absolute
+                    -translate-x-1/2
+                    flex flex-col
+                    items-center
+                    justify-end
+                "
+            >
+                <div class="rounded-full bg-gray-800 px-2 flex items-center">
+                    <div class="rounded-full w-2 h-2 mr-1 bg-red-600"></div>
+                    <div class="text-sm">Liquidation Price</div>
+                </div>
+
+                <div class="mt-2">
+                    {{ liquidationPrice }}
+                </div>
+
+                <div class="opacity-50">
+                    {{ liquidationExchange }}
+                </div>
+
+                <div
+                    class="border-l border-dashed border-white w-[1px] h-14"
+                ></div>
+            </div>
+
+            <div
+                *ngIf="collateralUsageLimitLeftOffset"
+                class="
+                    absolute
+                    -translate-x-1/2
+                    flex flex-col
+                    items-center
+                    justify-end
+                    left-full
+                    w-36
+                "
+            >
+                <div class="rounded-full bg-gray-800 px-2 flex items-center">
+                    <div class="rounded-full w-2 h-2 mr-1 bg-gray-400"></div>
+                    <div class="text-sm">Stop Loss Price</div>
+                </div>
+
+                <div
+                    class="
+                        border-l border-dashed border-white
+                        w-[1px]
+                        h-[1.3rem]
+                    "
+                ></div>
+            </div>
+        </div>
+
+        <app-borrow-limit-bar
+            [collateralUsageFactorLeftOffset]="collateralUsageFactorLeftOffset"
+            [collateralUsageLimitLeftOffset]="collateralUsageLimitLeftOffset"
+        ></app-borrow-limit-bar>
+
+        <div class="relative mx-[20%] w-[60%] h-32">
+            <div
+                class="
+                    absolute
+                    -translate-x-1/2
+                    flex flex-col
+                    items-center
+                    w-36
+                "
+                [style.left]="collateralUsageFactorLeftOffset"
+            >
+                <div
+                    class="border-l border-dashed border-white w-[1px] h-12"
+                ></div>
+
+                <div
+                    class="rounded-full bg-gray-800 mt-2 px-2 flex items-center"
+                >
+                    <div class="rounded-full w-2 h-2 mr-1 bg-white"></div>
+                    <div class="text-sm">Current Price</div>
+                </div>
+
+                <div class="mt-2">
+                    {{ currentPrice }}
+                </div>
+
+                <div class="opacity-50">
+                    {{ currentPriceExchange }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

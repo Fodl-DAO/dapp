@@ -1,0 +1,104 @@
+$white: #ffffff;
+$black: #000000;
+
+$greyish: #1d1d1d;
+$purple: #6731cb;
+$red: #de5542;
+$blue: #1796ff;
+$yellow: #ffa84a;
+$green: #55e695;
+$orange: #ea6539;
+$grey: #8493a1;
+$lightBlue: #42cbde;
+$lightGreen: #cbde42;
+$pink: #7b3bba;
+
+$dark: #121212;
+$errorRed: #e4402a;
+
+$primary: #1796ff;
+$alert: #ef4444;
+$warn: #f59e0b;
+$accent: rgba($primary, 0.1);
+$border-color-accent: adjust-color($accent, $alpha: 0.25, $lightness: 35%);
+
+$background-color: rgb(25, 28, 31);
+$background-internal-color: rgb(34, 38, 41);
+$background-light-color: rgb(39, 41, 44);
+$highlight-color: #242424;
+$foreground-color: $white;
+$border-color: #202020;
+$border-color-light: #404040;
+$button-primary-background: rgba($background-color, 0.4);
+$button-secondary-background: linear-gradient(
+    -10deg,
+    $purple 12.5%,
+    $primary 65%
+);
+$button-max-background: #abcaff;
+$tooltip-background-color: #151616;
+
+$scrollbar-track-bg: rgba(35, 20, 61, 0.2);
+$scrollbar-thumb-bg-color: rgba($purple, 0.4);
+
+.bg-grey {
+    background-color: $grey;
+}
+
+.bg-purple {
+    background-color: $purple;
+}
+
+.bg-pink {
+    background-color: $pink;
+}
+
+.bg-default {
+    background-color: rgba($background-color, 0.4);
+}
+
+.bg-internal {
+    background-color: $background-internal-color;
+}
+
+.bg-error {
+    background-color: rgba($errorRed, 0.2);
+}
+
+.border-internal {
+    border-color: $background-internal-color;
+}
+
+.border-pink {
+    border-color: $pink;
+}
+
+.border-b-pink {
+    border-bottom-color: rgba($pink, 0.5);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+.text-primary {
+    color: $primary;
+}
+
+.text-white {
+    color: $white;
+}
+
+.text-grey {
+    color: $grey;
+}
+
+.text-warn {
+    color: $warn;
+}
+
+.text-alert {
+    color: $alert;
+}
+
+.text-yellow {
+    color: $yellow;
+}

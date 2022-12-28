@@ -1,0 +1,94 @@
+<div class="w-full p-2">
+    <div class="flex">
+        <div class="flex flex-col w-3/4">
+            <div class="flex items-center">
+                <div class="w-12 transform scale-75">
+                    <app-icon-pair
+                        [asset1]="assetFodl.address"
+                        [asset2]="tokenAddress"
+                    ></app-icon-pair>
+                </div>
+
+                <div class="text-grey mb-1">{{ name }}</div>
+            </div>
+
+            <div class="flex text-3xl font-bold">
+                APY: {{ fodlApy | formatValue }}%
+            </div>
+        </div>
+
+        <div class="flex w-1/4 justify-end">
+            <img [attr.src]="icon" class="h-20" />
+        </div>
+    </div>
+
+    <div class="mt-3 mb-6"></div>
+
+    <div class="bordered-block bordered-block--internal my-3 flex">
+        <div class="w-1/4 text-grey">FODL:</div>
+
+        <div class="w-3/4 text-right">
+            {{ fodl | formatValue }} (${{ fodlUsd | formatValue }})
+        </div>
+    </div>
+
+    <div class="bordered-block bordered-block--internal my-3 flex">
+        <div class="w-1/4 text-grey">{{ tokenName }}:</div>
+
+        <div class="w-3/4 text-right">
+            {{ token | formatValue }} (${{ tokenUsd | formatValue }})
+        </div>
+    </div>
+
+    <div class="bordered-block bordered-block--internal my-3 flex">
+        <div class="w-1/2 text-grey">LP Supply:</div>
+
+        <div class="w-1/2 text-right">
+            {{ totalLPSupply | formatValue }} LP (${{ totalLPSupplyUsd | formatValue }})
+        </div>
+    </div>
+
+    <a [attr.href]="lpUrl" target="_blank" class="block my-4">
+        <button mat-button class="secondary w-full">Provide Liquidity</button>
+    </a>
+
+    <ng-container *ngIf="allowStaking$ | async">
+        <div class="my-6"></div>
+
+        <div class="bordered-block bordered-block--internal mt-4 mb-3 flex">
+            <div class="w-1/2 text-grey">Total LP Staked:</div>
+
+            <div class="w-1/2 text-right">
+                {{ totalStaked | formatValue }} LP (${{ totalStakedUsd | formatValue }})
+            </div>
+        </div>
+
+        <div class="bordered-block bordered-block--internal my-3 flex">
+            <div class="w-1/2 text-grey">Your Stake:</div>
+
+            <div class="w-1/2 text-right">
+                {{ staked | formatValue }} LP (${{ stakedUsd | formatValue }})
+            </div>
+        </div>
+
+        <div class="bordered-block bordered-block--internal my-3 flex">
+            <div class="w-1/2 text-grey">Your Rewards:</div>
+
+            <div class="w-1/2 text-right">
+                {{ rewards | formatValue }} FODL (${{ rewardsUsd | formatValue }})
+            </div>
+        </div>
+
+        <div class="bordered-block bordered-block--internal mt-3 mb-4 flex">
+            <div class="w-1/2 text-grey">APR:</div>
+
+            <div class="w-1/2 text-right">
+                {{ fodlApr | formatValue }}%
+            </div>
+        </div>
+
+        <button mat-button class="secondary w-full" (click)="openStaking()">
+            Staking
+        </button>
+    </ng-container>
+</div>

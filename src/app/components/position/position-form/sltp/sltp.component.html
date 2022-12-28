@@ -1,0 +1,364 @@
+<div
+    class="bordered-block bordered-block--internal w-full"
+    *ngIf="showForm; else dontShowForm"
+>
+    <div class="flex items-center justify-between mb-5">
+        <div class="flex font-medium text-base">Target Price</div>
+
+        <div class="flex has-tooltip ml-0.5">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h2 class="font-semibold mb-2">Target Price</h2>
+
+                <p>
+                    The price from the underlying lending market at which the
+                    position will be unwinded.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center">
+            <div class="text-base font-bold">
+                1 {{ priceTargetSymbols[0] }} =
+            </div>
+
+            <div class="flex w-40 mx-1">
+                <app-input
+                    [type]="'buttons'"
+                    [(ngModel)]="priceTarget"
+                    (change)="onChangePriceTarget()"
+                    [placeHolder]="'0'"
+                    [disabled]="!!pnlSettingsIndex"
+                    [invalid]="!validatePriceTarget()"
+                    (onIncrease)="modifyPriceTarget(10)"
+                    (onDecrease)="modifyPriceTarget(-10)"
+                >
+                </app-input>
+            </div>
+
+            <div class="text-base font-bold">{{ priceTargetSymbols[1] }}</div>
+        </div>
+
+        <div
+            class="flex text-base items-center justify-end w-28"
+            [class.text-green-400]="priceTarget > currentPrice"
+            [class.text-red-400]="priceTarget < currentPrice"
+        >
+            ({{
+                getPriceDifference(
+                    pnlSettingsIndex
+                        ? pnlSettings[pnlSettingsIndex - 1]
+                        : undefined
+                ) | formatValue
+            }}%)
+        </div>
+    </div>
+
+    <div class="flex items-center mb-5">
+        <div class="flex text-base opacity-50">Estimated PnL</div>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h2 class="font-semibold mb-2">Estimated PnL</h2>
+
+                <p>
+                    <!-- TODO: Add info -->
+                </p>
+            </div>
+        </div>
+
+        <div class="flex grow text-base items-center justify-center">
+            <span class="mr-2">
+                {{ getEstimatedPnlPercentage() | formatValue }}%
+            </span>
+
+            <app-icon-asset
+                class="w-5"
+                [asset]="position.supplyMarket.assetAddress"
+            >
+            </app-icon-asset>
+
+            <span class="ml-3.5 font-medium">
+                {{
+                    (getEstimatedPnl() | formatValue) +
+                        ' ' +
+                        position.supplyMarket.assetSymbol
+                }}
+            </span>
+        </div>
+
+        <div
+            class="
+                flex
+                text-base
+                items-center
+                w-28
+                justify-end
+                truncate
+                opacity-50
+            "
+        >
+            ${{ getEstimatedPnlUsd() | formatValue }}
+        </div>
+    </div>
+
+    <div class="flex items-center mb-5">
+        <div class="flex font-medium text-base">Fixed Fee</div>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h2 class="font-semibold mb-2">Fixed Fee</h2>
+
+                <p>
+                    This is a fixed fee in
+                    {{ position.supplyMarket.assetSymbol }} meant to cover the
+                    gas costs of the transaction. Based on the trade size and
+                    market conditions on the chosen chain, users can configure a
+                    combination of Fixed Fee and Slippage Incentive that best
+                    guarantees the bots will execute the trade.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex grow text-base items-center justify-center">
+            <div class="flex h-8 mr-1.5">
+                <button
+                    mat-button
+                    class="secondary text-xs !leading-none"
+                    [disabled]="!!pnlSettingsIndex"
+                    (click)="resetFixedFee()"
+                >
+                    Auto
+                </button>
+            </div>
+
+            <div class="flex w-28 mr-1.5">
+                <app-input
+                    [type]="'default'"
+                    [(ngModel)]="fixedReward"
+                    (change)="onChangeFixedReward()"
+                    [placeHolder]="'0'"
+                    [textAlign]="'right'"
+                    [disabled]="!!pnlSettingsIndex"
+                    [invalid]="!pnlSettingsIndex && !validateFixedReward()"
+                >
+                </app-input>
+            </div>
+
+            <app-icon-asset
+                class="w-5"
+                [asset]="position.supplyMarket.assetAddress"
+            >
+            </app-icon-asset>
+
+            <span class="ml-1.5 font-medium">
+                {{ position.supplyMarket.assetSymbol }}
+            </span>
+        </div>
+
+        <div class="flex text-base items-center w-28 justify-end opacity-50">
+            ${{ getFixedRewardUSDValue() | formatValue }}
+        </div>
+    </div>
+
+    <div class="flex items-center mb-4">
+        <div class="flex font-medium text-base">Slippage Incentive</div>
+
+        <div class="flex has-tooltip ml-2">
+            <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                >info</mat-icon
+            >
+
+            <div class="tooltip below-left !w-96">
+                <h2 class="font-semibold mb-2">Slippage Incentive</h2>
+
+                <p>
+                    Maximum allowed relative price difference between the oracle
+                    price of the underlying lending platform and the execution
+                    price. The oracle price and execution price are usually
+                    different due to delays in updating the oracle or because
+                    the trade itself has market price impact. For large
+                    positions that are expected to have price impact, this
+                    setting should be increased above the default value and the
+                    fixed fee may be removed.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex grow text-base items-center justify-center">
+            <div class="flex h-8 mr-1.5">
+                <button
+                    mat-button
+                    class="secondary text-xs !leading-none"
+                    [disabled]="!!pnlSettingsIndex"
+                    (click)="resetSlippageIncentive()"
+                >
+                    Auto
+                </button>
+            </div>
+
+            <div class="flex w-28 mr-1.5">
+                <app-input
+                    [type]="'default'"
+                    [(ngModel)]="slippageIncentive"
+                    (change)="onChangeSlippageIncentive()"
+                    [placeHolder]="'0'"
+                    [textAlign]="'right'"
+                    [disabled]="!!pnlSettingsIndex"
+                    [invalid]="
+                        !pnlSettingsIndex && !validateSlippageIncentive()
+                    "
+                >
+                </app-input>
+            </div>
+
+            <span class="ml-0.5">%</span>
+        </div>
+
+        <div class="flex text-base items-center w-20 justify-end opacity-50">
+            ${{ getSlippageIncentiveUSDValue() | formatValue }}
+        </div>
+    </div>
+
+    <div class="flex items-center mb-5">
+        <div class="flex text-base opacity-50">Estimated Total Fees</div>
+
+        <div
+            class="flex grow text-base items-center w-28 justify-end opacity-50"
+        >
+            ${{
+                getFixedRewardUSDValue() + getSlippageIncentiveUSDValue()
+                    | formatValue
+            }}
+        </div>
+    </div>
+
+    <div class="flex mt-8">
+        <div class="flex w-1/2 pr-2">
+            <button mat-button class="primary w-full" (click)="cancel()">
+                Cancel
+            </button>
+        </div>
+
+        <div class="flex w-1/2 pl-2">
+            <button
+                mat-button
+                class="secondary w-full"
+                [disabled]="!validateInputs() && !pnlSettingsIndex"
+                (click)="submit()"
+            >
+                {{ pnlSettingsIndex ? 'Delete' : 'Add' }} {{ getActionType() }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<ng-template #dontShowForm>
+    <div class="flex flex-col w-full">
+        <div
+            class="
+                bordered-block bordered-block--internal
+                hover:bordered-block--internal-highlight
+                cursor-pointer
+                w-full
+                flex
+                mb-4
+            "
+            *ngFor="let sltp of pnlSettings; let i = index"
+            (click)="editSLTP(i + 1)"
+        >
+            <div class="flex grow text-base">
+                {{ sltp.isTakeProfit ? 'Take Profit' : 'Stop Loss' }}
+
+                <div class="flex has-tooltip">
+                    <mat-icon
+                        class="
+                            ml-2
+                            material-icons-outlined
+                            opacity-50
+                            cursor-pointer
+                        "
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip below-left !w-96">
+                        <h2 class="font-semibold mb-2">
+                            {{
+                                sltp.isTakeProfit ? 'Take Profit' : 'Stop Loss'
+                            }}
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex text-base">
+                <div class="opacity-50">
+                    {{
+                        sltp.priceTarget
+                            | formatExchangeRate
+                                : position.supplyMarket.assetSymbol
+                                : position.borrowMarket.assetSymbol
+                                : 'long'
+                    }}
+                </div>
+
+                <div
+                    class="text-base ml-2"
+                    [class.text-green-400]="getPriceDifference(sltp) > 0"
+                    [class.text-red-400]="getPriceDifference(sltp) < 0"
+                >
+                    ({{ getPriceDifference(sltp) | formatValue }}%)
+                </div>
+            </div>
+        </div>
+
+        <div class="bordered-block bordered-block--internal w-full">
+            <div class="flex items-center">
+                <span
+                    class="
+                        mr-1.5
+                        text-base
+                        underline
+                        cursor-pointer
+                        opacity-50
+                        hover:opacity-80
+                        transition-all
+                    "
+                    (click)="editSLTP()"
+                >
+                    + Add SL/TP Configuration
+                </span>
+
+                <div class="flex has-tooltip">
+                    <mat-icon
+                        class="
+                            material-icons-outlined
+                            opacity-50
+                            cursor-pointer
+                        "
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip below-left !w-96">
+                        <h2 class="font-semibold mb-2">SL/TP Configuration</h2>
+
+                        <p>
+                            <!-- TODO: Add correct information -->
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

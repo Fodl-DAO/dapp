@@ -1,0 +1,32 @@
+@import '../colors';
+@import '../variables';
+
+.cdk-overlay-backdrop {
+    @apply backdrop-blur-sm;
+}
+
+.mat-dialog-container {
+    @apply backdrop-blur-lg;
+
+    background-color: rgba($background-color, 0.4);
+}
+
+.mat-dialog-title, div[mat-dialog-title] {
+    margin: -1.5 * $spacer -1.5 * $spacer $spacer !important;
+    padding: 1.5 * $spacer;
+    background: rgba($black, .1);
+    border-bottom-width: 1px;
+    border-bottom-color: rgba($white, .25);
+}
+
+.mat-dialog-actions, div[mat-dialog-actions] {
+    margin: $spacer -1.5 * $spacer -1.5 * $spacer -1.5 * $spacer;
+    background: rgba($black, .1);
+    padding: $spacer;
+    border-top-width: 1px;
+    border-top-color: rgba($white, .25);
+}
+
+.mat-dialog-actions.no-space {
+    margin-top: 0 !important;
+}

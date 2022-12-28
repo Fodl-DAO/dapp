@@ -1,0 +1,27 @@
+@import '/src/styles/colors';
+
+:host {
+    width: 100%;
+}
+
+.app-big-number-input {
+    input {
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            @apply m-0;
+            -webkit-appearance: none;
+        }
+
+        &[type='number'] {
+            -moz-appearance: textfield;
+        }
+
+        &:focus {
+            @apply ring-transparent;
+        }
+    }
+}
+
+.bg-app-big-number-input {
+    background-color: rgba($background-color, 0.2);
+}

@@ -1,0 +1,30 @@
+<div *ngIf="platform" class="app-icon-asset" [class.has-tooltip]="assetName">
+    <img
+        class="app-icon-asset__asset"
+        [attr.src]="getAssetIconAddress()"
+        [attr.alt]="assetName"
+        onerror="this.style.display='none'"
+    />
+
+    <app-icon-platform
+        class="app-icon-asset__platform"
+        [platform]="platform"
+        [platformName]="platformName"
+    ></app-icon-platform>
+
+    <div *ngIf="assetName" class="tooltip below-left mb-1">
+        <div class="w-40"><strong>Asset:</strong> {{ assetName }}</div>
+
+        <div class="w-40" *ngIf="platformName">
+            <strong>Platform:</strong> {{ platformName }}
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="!platform">
+    <img
+        [attr.src]="getAssetIconAddress()"
+        [attr.alt]="asset"
+        onerror="this.style.display='none'"
+    />
+</ng-container>

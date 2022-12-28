@@ -1,0 +1,49 @@
+<div class="flex flex-col items-center">
+    <div class="flex flex-col w-60">
+        <span class="font-normal text-base ml-1 mb-1">
+            Slippage
+        </span>
+        <app-input
+            class="bg-default rounded-lg"
+            [type]="'buttons'"
+            [symbol]="'%'"
+            [(ngModel)]="slippage"
+            [placeHolder]="'0'"
+            [invalid]="!isSlippageValid"
+            (onIncrease)="modifySlippage(0.5)"
+            (onDecrease)="modifySlippage(-0.5)"
+        >
+        </app-input>
+        <ng-container *ngIf="isSlippageWarning && isSlippageValid">
+            <div class="flex mt-1 text-orange-300">
+                <mat-icon class="text-orange-300 mr-1">
+                    warning
+                </mat-icon>
+                <p class="text-sm leading-6">
+                    {{ slippageWarningText }}
+                </p>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!isSlippageValid">
+            <div class="flex mt-1 text-red-400">
+                <mat-icon class="text-red-400 mr-1">
+                    error
+                </mat-icon>
+                <p class="text-sm leading-6">
+                    Enter a valid slippage
+                </p>
+            </div>
+        </ng-container>
+    </div>
+</div>
+
+<div mat-dialog-actions class="flex justify-center">
+    <button
+        mat-flat-button
+        class="secondary w-32"
+        (click)="save()"
+        [disabled]="!isSlippageValid"
+    >
+        Save
+    </button>
+</div>

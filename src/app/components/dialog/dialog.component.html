@@ -1,0 +1,16 @@
+<div
+    class="app-dialog"
+    [class.app-dialog--no-padding]="noPadding"
+    [class.app-dialog--no-title]="noTitle"
+>
+    <button
+        *ngIf="dialogRef"
+        mat-icon-button
+        class="app-dialog__close"
+        (click)="dialogRef.close()"
+    >
+        <mat-icon class="large">close</mat-icon>
+    </button>
+
+    <ng-content></ng-content>
+</div>

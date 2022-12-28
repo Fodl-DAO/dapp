@@ -1,0 +1,31 @@
+export interface IConfig {
+    build: string;
+    exchangeSlippage: number;
+    foldingRegistry: string;
+    lendingPlatformLens: string;
+    simplePositionLens: string;
+    rewardsDistributor: string;
+    fodlStakingUsdc: string;
+    fodlStakingEth: string;
+    fodlStakingWmatic: string;
+    singleSidedStaking: string;
+    xFodlUpdate: string;
+    bscFoldingRegistry: string;
+    bscLendingPlatformLens: string;
+    bscSimplePositionLens: string;
+    bscRewardsDistributor: string;
+    polygonFoldingRegistry: string;
+    polygonLendingPlatformLens: string;
+    polygonSimplePositionLens: string;
+    polygonRewardsDistributor: string;
+    network: string;
+    chainId: string;
+    rpcUrl: string;
+    bscChainId: string;
+    bscRpcUrl: string;
+    polygonChainId: string;
+    polygonRpcUrl: string;
+    sltp: boolean;
+    stopLoss: boolean;
+    cacheExpiresSeconds: number;
+}

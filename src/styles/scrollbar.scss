@@ -1,0 +1,21 @@
+@import './colors';
+
+/* Works on Firefox */
+* {
+    scrollbar-width: auto;
+    scrollbar-color: $scrollbar-thumb-bg-color $scrollbar-track-bg;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+    width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: $scrollbar-track-bg;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: $scrollbar-thumb-bg-color;
+    border-radius: 10px;
+}

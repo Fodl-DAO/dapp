@@ -1,0 +1,397 @@
+<ng-container
+    *ngIf="
+        longMarkets && supplyAsset && borrowAsset && !(marketsService.marketsLoading$ | async);
+        else marketsLoading
+    "
+>
+    <div class="flex mx-2 mb-4 relative">
+        <div class="w-1/2 mx-2 bordered-block bordered-block--internal !px-6 !pt-6 !pb-2">
+            <div class="flex items-center mb-8">
+                <div class="flex text-base font-semibold">Long</div>
+
+                <div class="flex has-tooltip ml-2">
+                    <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip below-left !w-72">
+                        <h3 class="font-semibold mb-2">Long</h3>
+
+                        The asset you expect to appreciate against the short asset. This asset will
+                        be supplied to the underlying platform. You will be able to borrow against
+                        this asset at a collateral factor of
+                        {{ getSupplyMarket()?.collateralFactor * 100 | formatValue }}% in order to
+                        create leverage.
+                    </div>
+                </div>
+            </div>
+
+            <app-asset-select
+                *ngIf="edit === 'all'"
+                class="flex w-48"
+                [markets]="longMarkets"
+                [(asset)]="supplyAsset"
+                (assetChange)="onSupplyAssetChange()"
+            ></app-asset-select>
+
+            <app-asset *ngIf="edit !== 'all'" [asset]="supplyAsset"></app-asset>
+        </div>
+
+        <div class="w-1/2 mx-2 bordered-block bordered-block--internal !px-6 !pt-6 !pb-2">
+            <div class="flex items-center mb-8">
+                <div class="flex text-base font-semibold">Short</div>
+
+                <div class="flex has-tooltip ml-2">
+                    <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip below-left !w-72">
+                        <h2 class="font-semibold mb-2">Short</h2>
+
+                        The asset you expect to depreciate against the long asset. This asset will
+                        be borrowed from the underlying platform, exchanged into the supply asset
+                        and deposited to the underlying platform.
+                    </div>
+                </div>
+            </div>
+
+            <app-asset-select
+                *ngIf="edit === 'all'"
+                class="flex w-48"
+                [markets]="shortMarkets"
+                [(asset)]="borrowAsset"
+                (assetChange)="onBorrowAssetChange()"
+            ></app-asset-select>
+
+            <app-asset *ngIf="edit !== 'all'" [asset]="borrowAsset"></app-asset>
+        </div>
+
+        <div
+            *ngIf="allowSwapAssets"
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+        >
+            <button mat-mini-fab class="blue !text-white" (click)="swapAssets()">
+                <mat-icon>swap_horiz</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="flex flex-col mx-4 mb-4 bordered-block bordered-block--internal">
+        <div class="flex w-full mb-6">
+            <div class="flex grow items-center">
+                <div class="flex text-base font-semibold">
+                    {{ edit === 'all' ? 'Principal Investment' : 'Position Value' }}
+                </div>
+            </div>
+
+            <div *ngIf="edit === 'all'" (click)="setMax()" class="button-max">
+                <span>Max:</span> {{ max }}
+            </div>
+        </div>
+
+        <div class="flex">
+            <div *ngIf="edit === 'all'" class="w-56">
+                <app-big-number-input
+                    [(value)]="supplyAmount"
+                    (valueChange)="simulate()"
+                    [decimals]="supplyAsset.decimals"
+                    [placeHolder]="'0'"
+                    [textAlign]="'left'"
+                >
+                </app-big-number-input>
+            </div>
+
+            <div *ngIf="edit !== 'all'" class="text-base self-center mr-8">
+                {{ position.positionValue | formatValue }}
+            </div>
+
+            <div class="flex grow items-center text-base">
+                <app-icon-asset
+                    class="w-6 ml-4 mr-6"
+                    [asset]="supplyAsset.address"
+                    [platform]="supplyAsset.platformAddress"
+                    [platformName]="supplyAsset.platformName"
+                ></app-icon-asset>
+
+                {{ supplyAsset.name }}
+            </div>
+
+            <div class="flex items-center opacity-50" *ngIf="edit === 'all' && supplyAmount">
+                ~${{ supplyAmountUsd | formatValue }}
+            </div>
+
+            <div class="flex items-center opacity-50" *ngIf="edit !== 'all'">
+                ~${{ position.positionValueUsd | formatValue }}
+            </div>
+        </div>
+    </div>
+
+    <div
+        *ngIf="edit === 'value'"
+        class="flex flex-col mx-4 mb-4 bordered-block bordered-block--internal"
+    >
+        <div class="flex items-center">
+            <div class="flex grow">
+                <div class="text-base font-semibold action capitalize">
+                    {{ action }}
+                </div>
+
+                <div class="flex has-tooltip ml-2">
+                    <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip above w-72">
+                        Please supply the amount by how much you want to change your principal
+                        investment.
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <div class="button-max" (click)="setMaxDelta()">
+                    <span>Max:</span> {{ maxDelta }}
+                </div>
+            </div>
+        </div>
+
+        <div class="flex my-4">
+            <div class="w-56">
+                <app-big-number-input
+                    [(value)]="supplyDelta"
+                    (valueChange)="simulate()"
+                    [decimals]="supplyAsset.decimals"
+                    [placeHolder]="'0'"
+                    [textAlign]="'left'"
+                >
+                </app-big-number-input>
+            </div>
+
+            <div class="flex grow items-center">
+                <app-icon-asset
+                    class="w-6 ml-4 mr-6"
+                    [asset]="supplyAsset.address"
+                    [platform]="supplyAsset.platformAddress"
+                    [platformName]="supplyAsset.platformName"
+                ></app-icon-asset>
+
+                {{ supplyAsset.name }}
+            </div>
+
+            <div class="flex items-center opacity-50" *ngIf="supplyDelta">
+                ~${{ supplyDeltaUsd | formatValue }}
+            </div>
+        </div>
+
+        <mat-button-toggle-group
+            class="max-h-14"
+            [(ngModel)]="action"
+            (ngModelChange)="onTypeActionChange()"
+        >
+            <mat-button-toggle class="w-1/2" value="supply">Supply</mat-button-toggle>
+
+            <mat-button-toggle class="w-1/2" value="withdraw">Withdraw</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <div class="flex flex-col mx-4 bordered-block bordered-block--internal">
+        <div class="flex w-full mb-6">
+            <div class="flex grow items-center">
+                <div class="flex text-base font-semibold">Leverage</div>
+
+                <div class="flex has-tooltip ml-2">
+                    <mat-icon class="material-icons-outlined opacity-50 cursor-pointer"
+                        >info</mat-icon
+                    >
+
+                    <div class="tooltip below-left !w-96">
+                        <h2 class="font-semibold mb-2">Leverage</h2>
+
+                        <p class="mb-2">
+                            Leverage represents the ratio between the debt to the underlying lending
+                            platform and the position value. By trading with leverage, users
+                            increase their exposure to the price of the short asset in relation to
+                            the long asset.
+                        </p>
+
+                        <p>
+                            A 2x long ETH vs. USDC would yield a profit of 20% on a 10% price drop
+                            in the price of USDC to ETH. Similarly, a 2x short BTC vs. USDC would
+                            yield a profit of 20% on a 10% price drop in the price of BTC to USDC.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center">
+            <div class="mr-5 w-56" *ngIf="edit === 'all' || edit === 'leverage'">
+                <app-input
+                    [type]="'buttons'"
+                    [symbol]="'x'"
+                    [(ngModel)]="leverage"
+                    (ngModelChange)="simulate()"
+                    [placeHolder]="'0'"
+                    (onIncrease)="modifyLeverage(0.25)"
+                    (onDecrease)="modifyLeverage(-0.25)"
+                >
+                </app-input>
+            </div>
+
+            <div
+                *ngIf="!edit || edit === 'value' || edit === 'close'"
+                class="text-base self-center w-1/3"
+            >
+                {{ position.leverage | formatValue }}x
+            </div>
+
+            <div class="flex grow items-center">
+                <app-slider
+                    class="w-full"
+                    [disabled]="!edit || edit === 'value' || edit === 'close'"
+                    [max]="maxLeverage"
+                    [min]="0.01"
+                    [step]="0.01"
+                    [(ngModel)]="leverage"
+                    (ngModelChange)="simulate()"
+                >
+                </app-slider>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="edit && executionPrice" class="flex mx-4 my-6">
+        <div class="flex items-center">
+            <span class="opacity-50 text-base">Execution Price</span>
+
+            <div class="flex has-tooltip ml-2">
+                <mat-icon class="material-icons-outlined opacity-50 cursor-pointer">info</mat-icon>
+
+                <div class="tooltip below-left !w-96">
+                    <h3 class="font-semibold mb-2">Execution Price</h3>
+
+                    <p>
+                        The estimated execution price is different from the oracle price reported by
+                        the underlying lending platform due to market inefficiencies and price
+                        impact caused by the trade itself. Slippage is not taken into consideration.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex grow items-center justify-end text-base relative">
+            <mat-progress-spinner
+                *ngIf="!executionPrice"
+                class="scale-[20%] !absolute -right-10"
+                color="accent"
+                mode="indeterminate"
+            ></mat-progress-spinner>
+
+            <span>
+                {{ executionPrice | formatExchangeRate: supplyAsset.name:borrowAsset.name:'long' }}
+            </span>
+
+            <span class="opacity-50 ml-2" [class.text-red-400]="executionPriceImpact * 100 < -1">
+                ({{ executionPriceImpact * 100 | formatValue }}%)
+            </span>
+        </div>
+    </div>
+
+    <div *ngIf="showLiquidationPrice" class="flex mx-4 mt-4">
+        <div class="flex items-center">
+            <span class="opacity-50 text-base">Liquidation Price</span>
+
+            <div class="flex has-tooltip ml-2">
+                <mat-icon class="material-icons-outlined opacity-50 cursor-pointer">info</mat-icon>
+
+                <div class="tooltip below-left !w-72">
+                    <h3 class="font-semibold mb-2">Liquidation Price</h3>
+
+                    Price on the underlying lending platform at which the position can be liquidated
+                    by anyone.
+                </div>
+            </div>
+        </div>
+
+        <div class="flex grow items-center justify-end text-base relative">
+            <mat-progress-spinner
+                *ngIf="!liquidationPrice"
+                class="scale-[20%] !absolute -right-10"
+                color="accent"
+                mode="indeterminate"
+            ></mat-progress-spinner>
+
+            <span>
+                {{
+                    liquidationPrice | formatExchangeRate: supplyAsset.name:borrowAsset.name:'long'
+                }}
+            </span>
+
+            <span class="opacity-50 ml-2" [class.text-red-400]="warnLiquidationPrice()">
+                ({{ liquidationPriceDifference * 100 | formatValue }}%)
+            </span>
+        </div>
+    </div>
+
+    <app-sltp
+        class="flex mt-4 mx-4"
+        *ngIf="sltp && position.positionAddress && isOpenPosition()"
+        [position]="position"
+        (settingSLTP)="settingSLTP = $event"
+    ></app-sltp>
+
+    <div *ngIf="!settingSLTP && (isOpenPosition() || edit)" class="flex flex-col mx-4 mt-4">
+        <button
+            mat-button
+            class="secondary w-full"
+            *ngIf="edit"
+            [disabled]="isSubmitButtonDisabled"
+            (click)="submit()"
+        >
+            {{ submitTitle }}
+        </button>
+
+        <ng-container *ngIf="!edit && isOpenPosition()">
+            <div *ngIf="position.borrowAmountUsd > 0" class="flex w-full mb-4">
+                <div class="flex w-1/2 pr-2">
+                    <button
+                        mat-button
+                        class="primary w-full"
+                        [routerLink]="['/edit-value', activatedRoute.snapshot.params]"
+                    >
+                        Change Value
+                    </button>
+                </div>
+
+                <div class="flex w-1/2 pl-2">
+                    <button
+                        mat-button
+                        class="primary w-full"
+                        [routerLink]="['/edit-leverage', activatedRoute.snapshot.params]"
+                    >
+                        Change Leverage
+                    </button>
+                </div>
+            </div>
+
+            <button
+                mat-button
+                class="secondary w-full ml-2"
+                [routerLink]="['/close-position', activatedRoute.snapshot.params]"
+            >
+                Close Position
+            </button>
+        </ng-container>
+    </div>
+</ng-container>
+
+<ng-template #marketsLoading>
+    <div class="py-16">
+        <mat-progress-spinner
+            class="mx-auto my-8"
+            color="accent"
+            mode="indeterminate"
+        ></mat-progress-spinner>
+    </div>
+</ng-template>

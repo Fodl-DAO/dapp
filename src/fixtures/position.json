@@ -1,0 +1,19 @@
+{
+    "positionAddress": null,
+    "platformAddress": null,
+    "supplyTokenAddress": null,
+    "borrowTokenAddress": null,
+    "supplyAmountBigNumber": null,
+    "borrowAmountBigNumber": null,
+    "collateralUsageFactor": null,
+    "principalValue": null,
+    "principalValueBigNumber": null,
+    "positionValue": null,
+    "positionValueBigNumber": null,
+    "supplyAmount": 0,
+    "supplyMarket": null,
+    "borrowMarket": null,
+    "leverage": 2,
+    "borrowAmount": 0,
+    "pnl": 0
+}

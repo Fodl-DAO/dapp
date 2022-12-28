@@ -1,0 +1,19 @@
+<ng-container *ngIf="routes.length">
+    <a
+        *ngFor="let route of routes; let i = index"
+        class="
+            inline-block
+            font-semibold
+            mt-6
+            pb-4
+            opacity-50
+            hover:opacity-75
+            transition-all
+            rounded-b-sm
+            mr-8
+        "
+        [routerLinkActive]="['!opacity-100', 'hover:opacity-100']"
+        [routerLink]="route.link"
+        >{{ route.label }}</a
+    >
+</ng-container>

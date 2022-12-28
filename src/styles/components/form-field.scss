@@ -1,0 +1,22 @@
+@import '../colors';
+@import '../variables';
+
+.mat-form-field-infix {
+    input {
+        @apply backdrop-blur-lg;
+
+        margin-top: calc($spacer / 2);
+        padding: $spacer;
+        border-radius: calc($spacer / 2);
+        background-color: rgba($background-color, 0.8);
+        text-align: center;
+    }
+
+    label {
+        color: $white !important;
+    }
+}
+
+.mat-form-field-underline {
+    display: none !important;
+}

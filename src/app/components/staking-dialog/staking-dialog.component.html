@@ -1,0 +1,25 @@
+<app-dialog [dialogRef]="dialogRef" [noPadding]="true" [noTitle]="true">
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Stake">
+            <div class="p-4">
+                <app-stake-unstake
+                    [type]="'stake'"
+                    [dialogRef]="dialogRef"
+                    [geyserContract]="geyserContract$ | async"
+                    [lpContract]="lpContract$ | async"
+                ></app-stake-unstake>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Unstake">
+            <div class="p-4">
+                <app-stake-unstake
+                    [type]="'unstake'"
+                    [dialogRef]="dialogRef"
+                    [geyserContract]="geyserContract$ | async"
+                    [lpContract]="lpContract$ | async"
+                ></app-stake-unstake>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</app-dialog>

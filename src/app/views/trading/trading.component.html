@@ -1,0 +1,231 @@
+<div class="flex my-8">
+    <div class="flex w-1/6 font-semibold text-4xl">Trading Strategies</div>
+
+    <div class="flex w-4/6 justify-center items-end">
+        <mat-button-toggle-group
+            class="max-h-14"
+            [(ngModel)]="selectedToggleAsset"
+            (ngModelChange)="handleSelectedAssetUpdate()"
+        >
+            <ng-container *ngFor="let asset of toggleAssets">
+                <mat-button-toggle [value]="asset">
+                    <div class="flex justify-items-center">
+                        <app-icon-asset
+                            class="flex w-8 mr-1"
+                            [assetSymbol]="asset"
+                        ></app-icon-asset>
+                        {{ asset }}
+                    </div>
+                </mat-button-toggle>
+            </ng-container>
+
+            <mat-button-toggle value="all">ALL</mat-button-toggle>
+        </mat-button-toggle-group>
+    </div>
+
+    <div
+        *ngIf="!(foldingService.error$ | async)"
+        class="flex w-1/6 justify-end items-end"
+    >
+        <a [routerLink]="['/new-position']">
+            <app-new-position-button></app-new-position-button>
+        </a>
+    </div>
+</div>
+
+<div
+    class="py-16"
+    *ngIf="marketsService.marketsLoading$ | async; else marketsLoaded"
+>
+    <mat-progress-spinner
+        class="mx-auto my-8"
+        color="accent"
+        mode="indeterminate"
+    ></mat-progress-spinner>
+</div>
+
+<ng-template #marketsLoaded>
+    <div
+        class="
+            bordered-block
+            bordered-block--transparent
+            bordered-block--no-padding
+        "
+    >
+        <div class="grid grid-cols-11 text-base text-half-transparent">
+            <div
+                class="flex items-center cursor-pointer col-span-3"
+                (click)="sortBy('market')"
+            >
+                Asset Pair
+
+                <mat-icon class="small ml-1" *ngIf="sortByValue === '-market'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="sortByValue === 'market'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div
+                class="flex items-center cursor-pointer col-span-2"
+                (click)="sortBy('maxLeverage')"
+            >
+                Max Leverage
+
+                <mat-icon
+                    class="small ml-1"
+                    *ngIf="sortByValue === 'maxLeverage'"
+                >
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon
+                    class="small ml-1"
+                    *ngIf="sortByValue === '-maxLeverage'"
+                >
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div
+                class="flex items-center cursor-pointer col-span-3"
+                (click)="sortBy('interestRate')"
+            >
+                Interest Rate
+
+                <mat-icon class="small ml-1" *ngIf="sortByValue === 'interestRate'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="sortByValue === '-interestRate'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div class="flex col-span-3 justify-end">
+                <span class="mr-2">
+                    Show Interest Rate per:
+                </span>
+                <div class="flex space-x-2 justify-between">
+                    <span class="cursor-pointer hover:opacity-70"
+                          (click)="handleTimeframeUpdate(1)"
+                          [class.text-white]="interestRateTimeframe === 1">
+                        1h
+                    </span>
+                    <span class="cursor-pointer hover:opacity-70"
+                          (click)="handleTimeframeUpdate(8)"
+                          [class.text-white]="interestRateTimeframe === 8">
+                        8h
+                    </span>
+                    <span class="cursor-pointer hover:opacity-70"
+                          (click)="handleTimeframeUpdate(24)"
+                          [class.text-white]="interestRateTimeframe === 24">
+                        Day
+                    </span>
+                    <span class="cursor-pointer hover:opacity-70"
+                          (click)="handleTimeframeUpdate(365 * 24)"
+                          [class.text-white]="interestRateTimeframe === 365 * 24">
+                        Year
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div infiniteScroll (scrolled)="handleOnScroll()">
+            <div
+                *ngFor="let foldingMarket of showedFoldingMarkets"
+                class="
+                    bordered-block bordered-block--internal
+                    grid grid-cols-11
+                    my-4
+                "
+            >
+                <div class="flex items-center pl-4 py-2 col-span-3">
+                    <app-icon-pair-platform
+                        [supplyAsset]="foldingMarket.supplyMarket.assetAddress"
+                        [supplyAssetName]="foldingMarket.supplyMarket.assetSymbol"
+                        [borrowAsset]="foldingMarket.borrowMarket.assetAddress"
+                        [borrowAssetName]="foldingMarket.borrowMarket.assetSymbol"
+                        [platformName]="foldingMarket.supplyMarket.platform.name"
+                    ></app-icon-pair-platform>
+                </div>
+
+                <div class="flex items-center col-span-2 text-base">
+                    {{ foldingMarket.maxLeverage | formatValue }}x
+                </div>
+
+                <div class="flex items-center col-span-3 text-base">
+                    <span class="has-tooltip cursor-pointer flex-col">
+                        <div class="flex mb-3 items-center">
+                            <app-icon-asset
+                                class="flex w-4 mr-2 pb-1"
+                                [asset]="foldingMarket.supplyMarket.assetAddress"
+                            ></app-icon-asset>
+
+                            {{
+                                foldingMarket.marketMaxApr
+                                    | formatValue
+                            }}%
+                        </div>
+
+                        <div class="flex">
+                            <app-icon-platform
+                                class="flex w-4 mr-2 pb-1"
+                                [platformName]="
+                                    foldingMarket.supplyMarket.platform.name
+                                "
+                            ></app-icon-platform>
+
+                            {{
+                                foldingMarket.marketMaxDistributionApr
+                                    | formatValue
+                            }}%
+                        </div>
+
+                        <div class="tooltip">
+                            <app-apr-tooltip
+                                [foldingMarket]="foldingMarket"
+                                [interestRateTimeframe]="interestRateTimeframe"
+                            ></app-apr-tooltip>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="flex items-center justify-end col-span-3">
+                    <div class="w-full mx-2">
+                        <a
+                            [routerLink]="[
+                                '/new-position',
+                                {
+                                    platform:
+                                        foldingMarket.supplyMarket.platform.address,
+                                    supplyAsset:
+                                        foldingMarket.supplyMarket.assetAddress,
+                                    borrowAsset:
+                                        foldingMarket.borrowMarket.assetAddress,
+                                    leverage:
+                                        foldingMarket.maxLeverage / 2
+                                }
+                            ]"
+                        >
+                            <button mat-flat-button class="primary w-full">
+                                {{ getCallToAction(foldingMarket) }}
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="block pb-1"></div>
+    </div>
+</ng-template>
+
+<div
+    *ngIf="foldingService.error$ | async"
+    class="text-4xl w-full text-center my-40"
+>
+    {{ foldingService.error$ | async }}
+</div>

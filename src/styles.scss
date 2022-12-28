@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined');
+
+@import '@angular/material/prebuilt-themes/pink-bluegrey';
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './styles/colors';
+@import './styles/variables';
+@import './styles/scrollbar';
+
+@import './styles/components/bordered-block';
+@import './styles/components/button';
+@import './styles/components/button-max';
+@import './styles/components/button-toggle';
+@import './styles/components/dialog';
+@import './styles/components/form-field';
+@import './styles/components/icon';
+@import './styles/components/input';
+@import './styles/components/menu';
+@import './styles/components/paginator';
+@import './styles/components/progress-spinner';
+@import './styles/components/select';
+@import './styles/components/slider';
+@import './styles/components/tab-bar';
+@import './styles/components/tooltip';
+@import './styles/components/web3modal.scss';
+
+body {
+    margin: 0;
+    background-color: $background-color;
+    color: $foreground-color;
+}

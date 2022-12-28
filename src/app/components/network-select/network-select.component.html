@@ -1,0 +1,7 @@
+<div class="w-40 p-2">
+    <mat-select (valueChange)="changeNetwork($event)" [value]="network">
+        <mat-option *ngFor="let network of networks" [value]="network.name">{{
+            network.description
+        }}</mat-option>
+    </mat-select>
+</div>

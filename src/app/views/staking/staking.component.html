@@ -1,0 +1,60 @@
+<h1 *ngIf="error$ | async" class="text-4xl w-full text-center my-40">
+    {{ error$ | async }}
+</h1>
+
+<ng-container *ngIf="singleSidedStaking && ethereumService.account$ | async">
+    <h1 class="my-8 pb-2 text-center text-2xl font-bold">Stake FODL</h1>
+
+    <div class="mx-32 mb-12 px-2 flex justify-center">
+        <app-single-sided-staking
+            class="
+                bordered-block
+                bordered-block--semi-transparent
+                bordered-block--accent
+                bordered-block--no-padding
+                w-2/3
+            "
+        ></app-single-sided-staking>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!(error$ | async)">
+    <h1 class="pt-4 pb-16 text-center text-2xl font-bold">
+        Provide liquidity on
+
+        <span
+            *ngIf="localNetwork === 'ethereum'"
+        >
+            SushiSwap
+        </span>
+
+        <span
+            *ngIf="localNetwork === 'polygon'"
+        >
+            QuickSwap
+        </span>
+
+        and stake LP to earn rewards
+    </h1>
+
+    <div class="mx-32 flex justify-center">
+        <app-lp-info
+            class="
+                bordered-block
+                bordered-block--semi-transparent
+                bordered-block--accent
+                flex flex-col
+                items-center
+                justify-center
+                m-2
+                w-full
+                max-w-lg
+                bg-blue-200
+            "
+            *ngFor="let lp of lps"
+            [name]="lp.name"
+            [lp]="lp.lp"
+            [icon]="lp.icon"
+        ></app-lp-info>
+    </div>
+</ng-container>

@@ -1,0 +1,9 @@
+.app-paginator {
+    @apply flex items-center;
+
+    &__button {
+        @apply h-8;
+
+        line-height: 0;
+    }
+}

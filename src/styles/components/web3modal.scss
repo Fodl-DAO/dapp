@@ -1,0 +1,10 @@
+@import '../colors';
+@import '../variables';
+
+.web3modal-modal-lightbox {
+    z-index: $z-index-top !important;
+}
+
+.walletconnect-modal__mobile__toggle {
+    color: $black;
+}

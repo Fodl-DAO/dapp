@@ -1,0 +1,15 @@
+<a href="https://www.coingecko.com/en/coins/fodl-finance" target="_blank">
+    <div class="p-2 flex items-center">
+        <img src="/assets/fodl-symbol.svg" class="scale-75 inline w-5 mr-2" />
+
+        <span *ngIf="fodlPrice">${{ fodlPrice | formatValue }}</span>
+
+        <div *ngIf="!fodlPrice" class="inline-block">
+            <mat-progress-spinner
+                color="accent"
+                mode="indeterminate"
+                diameter="14"
+            ></mat-progress-spinner>
+        </div>
+    </div>
+</a>

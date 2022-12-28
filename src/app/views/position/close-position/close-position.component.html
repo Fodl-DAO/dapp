@@ -1,0 +1,7 @@
+<ng-container *ngIf="position$ | async as position; else loading">
+    <app-position [position]="position" edit="close"></app-position>
+</ng-container>
+
+<ng-template #loading>
+    <app-position-loading></app-position-loading>
+</ng-template>

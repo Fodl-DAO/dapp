@@ -1,0 +1,23 @@
+@import '../variables';
+
+.mat-select-value {
+    padding-right: calc($spacer / 2);
+}
+
+.mat-option {
+    height: auto !important;
+    padding-top: calc($spacer / 2) !important;
+    padding-bottom: calc($spacer / 2) !important;
+
+    .mat-option-text {
+        @apply text-base font-normal;
+    }
+}
+
+.mat-select-panel {
+    background-color: $background-color;
+}
+
+.mat-option.mat-active {
+    background-color: rgba($background-color, 0.4);
+}

@@ -1,0 +1,11 @@
+<div *ngIf="foldingService.error$ | async" class="text-4xl w-full text-center my-40">
+    {{ foldingService.error$ | async }}
+</div>
+
+<ng-container *ngIf="position$ | async as position; else loading">
+    <app-position [position]="position"></app-position>
+</ng-container>
+
+<ng-template #loading>
+    <app-position-loading></app-position-loading>
+</ng-template>

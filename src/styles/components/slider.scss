@@ -1,0 +1,35 @@
+@import '../colors';
+
+$slider-background: #727883;
+$slider-marker: $white;
+
+@mixin slider-background {
+    background-image: linear-gradient(90deg,
+        $slider-marker 1%, $slider-background 1%,
+        $slider-background 25%, $slider-marker 25%,
+        $slider-marker 26%, $slider-background 26%,
+        $slider-background 50%, $slider-marker 50%,
+        $slider-marker 51%, $slider-background 51%,
+        $slider-background 75%, $slider-marker 75%,
+        $slider-marker 76%, $slider-background 76%,
+        $slider-background 99%, $slider-marker 99%);
+    background-size: 100% 100%;
+}
+
+mat-slider {
+    .mat-slider-track-wrapper {
+        @include slider-background();
+    }
+
+    .mat-slider-thumb {
+        background-color: $white !important;
+    }
+
+    .mat-slider-track-background {
+        background-color: transparent !important;
+    }
+    
+    .mat-slider-track-fill {
+        background-color: transparent !important;
+    }
+}

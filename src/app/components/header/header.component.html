@@ -1,0 +1,45 @@
+<header class="app-header">
+    <div class="backdrop-blur-lg pb-2">
+        <div class="absolute top-6 left-4">
+            <a href="https://fodl.finance"
+                ><img src="assets/fodl-logo.svg" class="w-32 inline-block"
+            /></a>
+        </div>
+
+        <div class="app-header__navigation">
+            <app-navigation></app-navigation>
+        </div>
+
+        <div class="absolute top-4 right-4 flex">
+            <div
+                class="
+                    bordered-block bordered-block--semi-transparent bordered-block--no-padding
+                    self-center
+                    mr-3
+                "
+            >
+                <app-fodl-price></app-fodl-price>
+            </div>
+
+            <div
+                *ngIf="allowNetworkSelect"
+                class="
+                    bordered-block bordered-block--semi-transparent bordered-block--no-padding
+                    self-center
+                    mr-3
+                "
+            >
+                <app-network-select></app-network-select>
+            </div>
+
+            <div
+                class="
+                    bordered-block bordered-block--semi-transparent bordered-block--no-padding
+                    self-center
+                "
+            >
+                <app-wallet></app-wallet>
+            </div>
+        </div>
+    </div>
+</header>

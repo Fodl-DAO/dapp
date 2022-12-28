@@ -1,0 +1,89 @@
+@import '../variables';
+
+.app-input {
+    @apply rounded-lg;
+
+    background: rgba(black, 0.2);
+
+    input {
+        @apply bg-transparent truncate px-12 text-2xl text-center font-thin w-full;
+
+        border: none !important;
+        outline: none !important;
+    }
+
+    input:focus {
+        --tw-ring-color: transparent;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    &--small {
+        input {
+            @apply bg-transparent truncate px-6 text-lg text-center font-thin w-full;
+
+            border: none !important;
+            outline: none !important;
+        }
+    }
+}
+
+.app-input-small {
+    @apply flex px-2;
+
+    font-weight: 400;
+    font-size: 18px !important;
+    line-height: 18px !important;
+    letter-spacing: 0.02em;
+    color: $white;
+    background-color: rgba($background-color, 0.2);
+    border: none !important;
+    outline: none !important;
+    border-radius: 8px !important;
+
+    input {
+        @apply w-4/6 bg-transparent;
+        border: none !important;
+        outline: none !important;
+    }
+
+    button {
+        @apply w-1/6 bg-transparent;
+        line-height: 0px;
+    }
+
+    button.invalid {
+        color: $errorRed;
+    }
+
+    button:disabled {
+        color: #373d42;
+    }
+
+    input:focus {
+        --tw-ring-color: transparent;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+    }
+}
+
+.app-input-small.invalid {
+    background-color: rgba($errorRed, 0.2);
+    background-blend-mode: multiply;
+}

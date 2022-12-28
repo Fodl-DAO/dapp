@@ -1,0 +1,35 @@
+<div
+    class="
+        app-big-number-input
+        flex
+        items-center
+        px-2
+        rounded-lg
+        w-full
+        bg-app-big-number-input
+    "
+>
+    <input
+        matInput
+        onlyNums
+        type="text"
+        [decimals]="decimals"
+        [(ngModel)]="valueOnInput"
+        (ngModelChange)="onValueChange()"
+        [placeholder]="placeHolder"
+        [disabled]="disabled"
+        [readonly]="readonly"
+        [name]="name"
+        [ngClass]="textAlign === 'left' ? 'text-start' : 'text-center'"
+        class="
+            h-10
+            bg-transparent
+            font-normal
+            text-lg
+            outline-none
+            border-none
+            w-full
+            truncate
+        "
+    />
+</div>

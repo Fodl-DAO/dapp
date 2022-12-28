@@ -1,0 +1,37 @@
+<div
+    class="relative inline-flex w-8 h-8"
+    [class.has-tooltip]="
+        assetName1 && assetName2 && assetDescription1 && assetDescription2
+    "
+>
+    <div
+        class="transform"
+        [class.scale-50]="size === 'small'"
+        [class.scale-75]="size === 'smaller'"
+        [class.scale-100]="size === 'medium'"
+        [class.scale-125]="size === 'larger'"
+        [class.scale-150]="size === 'large'"
+    >
+        <app-icon-asset
+            class="absolute left-2 w-8"
+            [asset]="asset2"
+            [assetName]="assetName2"
+        ></app-icon-asset>
+
+        <app-icon-asset
+            class="absolute -left-2 w-8"
+            [asset]="asset1"
+            [assetName]="assetName1"
+        ></app-icon-asset>
+    </div>
+
+    <div *ngIf="assetName1 && assetName2" class="tooltip below-left mb-1">
+        <div class="w-48">
+            <strong>{{ assetDescription1 }}:</strong> {{ assetName1 }}
+        </div>
+
+        <div class="w-48">
+            <strong>{{ assetDescription2 }}:</strong> {{ assetName2 }}
+        </div>
+    </div>
+</div>

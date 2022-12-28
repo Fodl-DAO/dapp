@@ -1,0 +1,39 @@
+<div class="grid relative">
+    <div class="flex-1 p-4" *ngIf="chartData && oraclePrice; else loading">
+        <app-asset-price
+            [oraclePrice]="oraclePrice"
+            [borrowMarket]="position.borrowMarket"
+            [supplyMarket]="position.supplyMarket"
+            [filterDays]="filterDays"
+            (filterDaysEvent)="updateFilterDays($event)"
+        >
+        </app-asset-price>
+
+        <ng-container *ngIf="!isChartLoading; else loadingChart">
+            <app-asset-chart
+                [borrowMarket]="position.borrowMarket"
+                [supplyMarket]="position.supplyMarket"
+                [filterDays]="filterDays"
+                [chartData]="chartData"
+            >
+            </app-asset-chart>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #loading>
+    <div class="flex justify-center items-center py-16 min-h-[18.75rem]">
+        <mat-progress-spinner
+            class="mx-auto my-8"
+            color="accent"
+            mode="indeterminate"
+        ></mat-progress-spinner>
+    </div>
+</ng-template>
+
+<ng-template #loadingChart>
+    <div class="flex justify-center items-center py-16 min-h-[12rem]">
+        <mat-spinner color="accent" [diameter]="50" [strokeWidth]="5" mode="indeterminate">
+        </mat-spinner>
+    </div>
+</ng-template>

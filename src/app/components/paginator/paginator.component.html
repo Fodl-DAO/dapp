@@ -1,0 +1,40 @@
+<div class="app-paginator">
+    <div class="whitespace-nowrap mr-4 opacity-50">Items per page:</div>
+
+    <div class="flex w-12">
+        <mat-select
+            [(value)]="itemsPerPage"
+            (valueChange)="
+                page = 1;
+                pageChange.emit(page);
+                itemsPerPageChange.emit(itemsPerPage)
+            "
+        >
+            <mat-option *ngFor="let option of options" [value]="option">
+                {{ option }}
+            </mat-option>
+        </mat-select>
+    </div>
+
+    <div class="ml-4">
+        <button
+            mat-icon-button
+            class="app-paginator__button"
+            [disabled]="page === 1"
+            (click)="page = page - 1; pageChange.emit(page)"
+        >
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <span class="text-xs">{{ page }} / {{ getLastPage() }}</span>
+
+        <button
+            mat-icon-button
+            class="app-paginator__button"
+            [disabled]="page === getLastPage()"
+            (click)="page = page + 1; pageChange.emit(page)"
+        >
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+    </div>
+</div>

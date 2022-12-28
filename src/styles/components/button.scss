@@ -1,0 +1,95 @@
+@import '../colors';
+@import '../variables';
+
+$button-border-radius: 3 * $spacer;
+
+button {
+    @apply brightness-100;
+
+    border-radius: $button-border-radius !important;
+    transition: all .3s ease;
+    padding-top: calc($spacer / 4) !important;
+    padding-bottom: calc($spacer / 4) !important;
+
+    &.default {
+        background: $background-color !important;
+    }
+
+    &.primary {
+        background: $button-primary-background !important;
+    }
+
+    &.secondary {
+        background: $button-secondary-background !important;
+    }
+
+    &.small {
+        @apply p-0 text-xs w-8 h-8 leading-none;
+
+        min-width: 2 * $spacer;
+    }
+}
+
+button:hover:not(:disabled) {
+    @apply brightness-125;
+
+    &.primary {
+        background: adjust-color($button-primary-background, $lightness: 7.5%, $alpha: 0.05) !important;
+    }
+}
+
+button.mat-stroked-button {
+    background: none !important;
+    transition: all .3s ease;
+
+    &.primary {
+        border-color: $border-color-light;
+    }
+}
+
+button.mat-stroked-button:hover {
+    background: rgba(white, 0.025) !important;
+}
+
+button[disabled] {
+    opacity: .35;
+    color: $white;
+
+    transition: opacity .3s ease;
+}
+
+button[mat-icon-button][disabled] {
+    opacity: .5
+}
+
+.mat-button.mat-primary.mat-button-disabled, .mat-button.mat-accent.mat-button-disabled, .mat-button.mat-warn.mat-button-disabled, .mat-button.mat-button-disabled.mat-button-disabled, .mat-icon-button.mat-primary.mat-button-disabled, .mat-icon-button.mat-accent.mat-button-disabled, .mat-icon-button.mat-warn.mat-button-disabled, .mat-icon-button.mat-button-disabled.mat-button-disabled, .mat-stroked-button.mat-primary.mat-button-disabled, .mat-stroked-button.mat-accent.mat-button-disabled, .mat-stroked-button.mat-warn.mat-button-disabled, .mat-stroked-button.mat-button-disabled.mat-button-disabled {
+    color: $white;
+}
+
+.mat-button-focus-overlay {
+    background-color: transparent !important;
+}
+
+.mat-mini-fab {
+    line-height: 0px !important;
+
+    .mat-button-wrapper {
+        padding: 0px !important;
+    }
+
+    &.default {
+        background: $background-color !important;
+    }
+
+    &.primary {
+        background: $button-primary-background !important;
+    }
+
+    &.secondary {
+        background: $button-secondary-background !important;
+    }
+
+    &.blue {
+        background: $blue;
+    }
+}

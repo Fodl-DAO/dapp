@@ -1,0 +1,42 @@
+@import '../colors';
+@import '../variables';
+@import './button';
+
+.mat-button-toggle {
+    border-radius: $button-border-radius;
+
+    .mat-button-toggle-ripple {
+        border-radius: $button-border-radius !important;
+    }
+}
+
+.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+    border-radius: $button-border-radius !important;
+    border-width: calc($spacer / 4) !important;
+    border-color: transparent !important;
+    background-color: rgba($background-color, 0.4) !important;
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+    border-width: 0 !important;
+}
+
+.mat-button-toggle-appearance-standard {
+    background-color: transparent !important;
+
+    .mat-button-toggle-label-content {
+        padding: 0 1.8rem !important;
+        font-weight: 600 !important;
+        font-size: 12pt !important;
+        line-height: 2.5 * $spacer !important;
+        color: rgba($white, 0.6) !important;
+    }
+}
+
+.mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+    background-color: rgba($background-color, 0.4) !important;
+
+    .mat-button-toggle-label-content {
+        color: $white !important;
+    }
+}

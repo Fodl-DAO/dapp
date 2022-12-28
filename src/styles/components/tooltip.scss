@@ -1,0 +1,53 @@
+@import '../colors';
+@import '../variables';
+
+.has-tooltip {
+    @apply relative;
+}
+
+.tooltip {
+    @apply invisible absolute z-50 opacity-0 transition-opacity;
+
+    top: calc(100% + 1rem);
+    left: calc(-50% + 1rem);
+
+    transition: opacity .25s ease;
+}
+
+.tooltip.above {
+    top: unset;
+    bottom: 100%;
+    margin-bottom: 0.25 * $spacer;
+}
+
+.tooltip.below {
+    @apply w-auto top-full mt-1 right-0 left-auto;
+}
+
+.tooltip.below-left {
+    @apply w-auto top-full mt-1 left-0 right-auto;
+}
+
+.tooltip.below-center {
+    @apply w-auto top-full mt-1 left-1/2;
+    transform: translate(-50%, 0);
+}
+
+.tooltip.below-right {
+    @apply -top-1/2 left-full;
+}
+
+.tooltip.right-center {
+    @apply -top-1/4 left-full;
+    transform: translate(0, -50%);
+}
+
+.tooltip.top-right {
+    @apply top-0 left-full;
+}
+
+.has-tooltip:hover .tooltip {
+    @apply visible text-base p-4 text-left text-white rounded opacity-100 transition-opacity;
+
+    background-color: rgba($tooltip-background-color, 0.95);
+}

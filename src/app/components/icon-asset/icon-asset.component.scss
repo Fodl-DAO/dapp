@@ -1,0 +1,14 @@
+.app-icon-asset {
+    @apply relative inline-flex w-16 h-8;
+
+    &__platform {
+        @apply absolute -left-1 w-6 h-6;
+
+        box-shadow: rgb(32 32 32 / 40%) 0.25rem 0.25rem 0.25rem;
+        border-radius: 50%;
+    }
+
+    &__asset {
+        @apply absolute left-1 w-8;
+    }
+}

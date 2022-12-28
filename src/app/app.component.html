@@ -1,0 +1,23 @@
+<div
+    class="
+        fixed
+        w-screen
+        h-screen
+        bg-gradient-to-b
+        from-[#262345]
+        to-[#313438]
+        blur-[150px]
+    "
+>
+    <img src="assets/fodl-bg.webp" class="absolute w-full h-full" />
+</div>
+
+<div class="absolute w-full h-full">
+    <app-header></app-header>
+
+    <main class="block mt-28 mx-auto max-w-7xl min-h-[78%]">
+        <router-outlet></router-outlet>
+    </main>
+
+    <app-footer></app-footer>
+</div>

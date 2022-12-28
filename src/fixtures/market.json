@@ -1,0 +1,25 @@
+{
+    "assetAddress": "assetAddress",
+    "assetSymbol": "assetSymbol",
+    "assetDecimals": 18,
+    "assetUsdValue": 1,
+    "totalSupply": 100,
+    "supplyAPR": 10,
+    "totalBorrow": 100,
+    "borrowAPR": 10,
+    "collateralFactor": 75,
+    "supplyRewardsAPR": 10,
+    "borrowRewardsAPR": 10,
+    "walletBalance": 100,
+    "platform": {
+        "address": "address",
+        "name": "name",
+        "platformName": "name",
+        "rewardTokenAddress": "rewardTokenAddress",
+        "rewardTokenDecimals": 18
+    },
+    "isOpenForBorrow": true,
+    "isUsedAsCollateral": true,
+    "liquidationFactor": 1,
+    "referencePrice": 100
+}

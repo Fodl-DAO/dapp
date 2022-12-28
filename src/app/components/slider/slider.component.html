@@ -1,0 +1,23 @@
+<div
+    class="app-slider flex flex-col"
+    [ngClass]="ticksType === 'all' ? 'app-slider-ticks-all' : 'app-slider-ticks-first-last'"
+>
+    <mat-slider
+        class="w-full"
+        [(ngModel)]="value"
+        [tickInterval]="'auto'"
+        [disabled]="disabled"
+        [max]="max"
+        [min]="min"
+        [step]="step">
+    </mat-slider>
+    <div
+        *ngIf="showTicks"
+        class="app-slider-ticks flex justify-between w-full"
+        [class.first-slider-tick-margin]="_isTicksInteger"
+    >
+        <p *ngFor="let i of _ticks">
+            {{ i }}
+        </p>
+    </div>
+</div>

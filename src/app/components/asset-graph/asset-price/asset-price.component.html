@@ -1,0 +1,73 @@
+<div *ngIf="oraclePrice && quoteSymbol && priceSymbol">
+    <div class="flex items-center">
+        <app-icon-asset
+            class="w-4"
+            [asset]="quoteSymbol | assetAddress: supplyMarket.platform.address"
+        >
+        </app-icon-asset>
+
+        <p class="ml-2 text-base">
+            {{ quoteSymbol }}
+            Price
+        </p>
+    </div>
+
+    <div class="flex items-center">
+        <div class="w-1/2">
+            <div class="flex my-2 items-center">
+                <app-icon-asset
+                    class="w-6 mr-2"
+                    [asset]="priceSymbol | assetAddress: supplyMarket.platform.address"
+                >
+                </app-icon-asset>
+
+                <span class="text-3xl">
+                    {{ oraclePriceString }}
+                </span>
+            </div>
+        </div>
+        <div class="w-1/2">
+            <div class="flex justify-end bg-transparent text-gray-500 font-bold mt-2">
+                <span
+                    class="p-1 cursor-pointer hover:"
+                    (click)="changeFilterDays(timeRange.DAY)"
+                    [class.text-white]="filterDays === timeRange.DAY"
+                >
+                    1D
+                </span>
+
+                <span
+                    class="p-1 cursor-pointer hover:"
+                    (click)="changeFilterDays(timeRange.WEEK)"
+                    [class.text-white]="filterDays === timeRange.WEEK"
+                >
+                    1W
+                </span>
+
+                <span
+                    class="p-1 cursor-pointer hover:"
+                    (click)="changeFilterDays(timeRange.MONTH)"
+                    [class.text-white]="filterDays === timeRange.MONTH"
+                >
+                    1M
+                </span>
+
+                <span
+                    class="p-1 cursor-pointer hover:"
+                    (click)="changeFilterDays(timeRange.THREE_MONTH)"
+                    [class.text-white]="filterDays === timeRange.THREE_MONTH"
+                >
+                    3M
+                </span>
+
+                <span
+                    class="p-1 cursor-pointer hover:"
+                    (click)="changeFilterDays(timeRange.YEAR)"
+                    [class.text-white]="filterDays === timeRange.YEAR"
+                >
+                    Year
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

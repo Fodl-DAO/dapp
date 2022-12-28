@@ -1,0 +1,23 @@
+@import '../../../styles/variables';
+
+.app-dialog {
+    position: relative;
+
+    &--no-padding {
+        margin: -1.5 * $spacer;
+    }
+
+    &__close {
+        position: absolute;
+        top: $spacer;
+        right: calc($spacer / -2);
+        z-index: $z-index-top;
+    }
+
+    &--no-title {
+        .app-dialog__close {
+            top: calc($spacer / 4);
+            right: calc($spacer / 4);
+        }
+    }
+}

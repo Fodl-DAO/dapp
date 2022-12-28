@@ -1,0 +1,11 @@
+@import '../colors';
+
+.button-max {
+    @apply cursor-pointer font-semibold tracking-normal
+           opacity-70 hover:opacity-100 transition-all;
+
+    span {
+        @apply mr-0.5;
+        color: $button-max-background;
+    }
+}

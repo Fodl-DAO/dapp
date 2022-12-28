@@ -1,0 +1,72 @@
+@import '../colors';
+@import '../variables';
+
+$block-highlight-background: adjust-color($background-color, $lightness: 2.5%);
+$block-internal-highlight-background: adjust-color(
+    $background-internal-color,
+    $lightness: 2.5%
+);
+
+.bordered-block {
+    @apply text-sm;
+
+    background-color: $background-color;
+    padding: $spacer;
+    border-radius: calc($spacer / 2);
+    transition: background-color 0.3s ease;
+
+    .text-special {
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 19px;
+        align-items: center;
+        font-feature-settings: 'cv08' on;
+
+        background: linear-gradient(299.31deg, #55e695 11.36%, #1796ff 65.14%),
+            #0cd988;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
+
+    &--transparent {
+        background-color: transparent;
+
+        .bordered-block--internal {
+            background-color: rgba($background-color, 0.4);
+        }
+
+        .bordered-block--internal.invalid {
+            background-color: rgba($errorRed, 0.2);
+
+            .invalid {
+                color: $errorRed;
+            }
+        }
+    }
+
+    &--semi-transparent {
+        background-color: rgba($background-color, 0.4);
+
+        .bordered-block--internal {
+            background-color: rgba($background-color, 0.25);
+        }
+    }
+
+    &--highlight {
+        background-color: $block-highlight-background;
+    }
+
+    &--internal {
+        background-color: $background-internal-color;
+    }
+
+    &--internal-highlight {
+        background-color: $block-internal-highlight-background;
+    }
+
+    &--no-padding {
+        padding: 0;
+    }
+}

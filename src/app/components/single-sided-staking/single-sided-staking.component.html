@@ -1,0 +1,137 @@
+<div class="flex flex-col mt-6 mx-6">
+    <div class="flex mb-4 items-center">
+        <div class="bordered-block bordered-block--internal flex flex-1 mr-2">
+            <div class="text-grey">APR:</div>
+
+            <div class="flex-grow text-right font-bold">
+                {{ apr | formatValue }}%
+            </div>
+        </div>
+
+        <div class="bordered-block bordered-block--internal flex flex-1 ml-2">
+            <div class="text-grey">xFODL price:</div>
+
+            <div class="flex-grow text-right">
+                <span class="font-bold">{{
+                    xFodlPrice | formatValue
+                }}</span>
+
+                FODL
+            </div>
+        </div>
+
+        <button
+            mat-button
+            class="has-tooltip bordered-block bordered-block--internal !leading-5 !py-3 !ml-2 !rounded"
+            (click)="updateXFodlPrice()"
+        >
+            <mat-icon class="large">refresh</mat-icon>
+
+            <div class="tooltip top-right font-normal">
+                <h3 class="font-semibold mb-2">Update xFODL price</h3>
+
+                <p class="mb-2">
+                    The xFODL to FODL price is constantly increasing as<br>
+                    rewards are distributed. Any user has the ability to<br>
+                    update the price by triggering the rewards distribution.
+                </p>
+
+                <p class="mb-2">
+                    We recommend updating the price before unstaking to <br>
+                    maximise the amount of FODL rewards received.
+                </p>
+
+                <p class="flex items-center">
+                    Last update of xFODL price was:
+
+                    <span *ngIf="!xFodlLastUpdateAgo" class="ml-2">
+                        <mat-progress-spinner
+                            color="accent"
+                            mode="indeterminate"
+                            diameter="14"
+                        ></mat-progress-spinner>
+                    </span>
+
+                    <span *ngIf="xFodlLastUpdateAgo" class="ml-1">
+                        <u>{{ xFodlLastUpdateAgo }}</u>
+                    </span>
+                </p>
+            </div>
+        </button>
+    </div>
+
+    <div class="bordered-block bordered-block--internal flex mb-4">
+        <div class="text-grey">Total Staked:</div>
+
+        <div class="flex-grow text-right">
+            <span class="font-bold">{{
+                xFodlTotalSupply | formatValue
+            }}</span>
+
+            xFODL =
+
+            <span class="font-bold">{{
+                xFodlTotalSupply * xFodlPrice | formatValue
+            }}</span>
+
+            FODL
+
+            <span class="ml-2">(${{ tvlUsd | formatValue }})</span>
+        </div>
+    </div>
+
+    <div class="bordered-block bordered-block--internal flex">
+        <div class="text-grey">Your Stake:</div>
+
+        <div class="flex-grow text-right">
+            <span class="font-bold">{{
+                getBalanceXFodl() | formatValue
+            }}</span>
+
+            xFODL =
+
+            <span class="font-bold">{{
+                getBalanceXFodl() * xFodlPrice | formatValue
+            }}</span>
+
+            FODL
+
+            <span class="ml-2"
+                >(${{ getBalanceXFodlUsd() | formatValue }})</span
+            >
+        </div>
+    </div>
+</div>
+
+<ng-container *ngIf="balanceFodl && balanceXFodl; else balancesLoading">
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Stake FODL">
+            <div class="px-6">
+                <app-single-sided-stake-unstake
+                    [type]="'stake'"
+                    [balance]="balanceFodl"
+                    (reloadBalances)="getBalances()"
+                ></app-single-sided-stake-unstake>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Unstake xFODL">
+            <div class="px-6">
+                <app-single-sided-stake-unstake
+                    [type]="'unstake'"
+                    [balance]="balanceXFodl"
+                    (reloadBalances)="getBalances()"
+                ></app-single-sided-stake-unstake>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</ng-container>
+
+<ng-template #balancesLoading>
+    <mat-progress-spinner
+        class="mx-auto my-12"
+        color="accent"
+        mode="indeterminate"
+    ></mat-progress-spinner>
+</ng-template>
+

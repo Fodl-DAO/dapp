@@ -1,0 +1,266 @@
+<h1 class="mt-8 text-yellow">PORTFOLIO</h1>
+
+<div class="flex mt-2 mb-8">
+    <div class="flex grow">
+        <span *ngIf="isPositionsLoaded" class="font-semibold text-3xl">
+            ${{ netWorth$ | async | formatValue }}
+        </span>
+    </div>
+
+    <div *ngIf="!(foldingService.error$ | async)" class="flex">
+        <a [routerLink]="['/new-position']">
+            <app-new-position-button></app-new-position-button>
+        </a>
+    </div>
+</div>
+
+<div
+    *ngIf="isPositionsLoaded; else positionsLoading"
+    class="bordered-block bordered-block--transparent bordered-block--no-padding"
+>
+    <div *ngIf="isPositionsExist">
+        <div class="grid grid-cols-11 pt-4 sticky z-10 text-base text-half-transparent">
+            <div class="flex items-center cursor-pointer col-span-3" (click)="sortBy('market')">
+                Asset Pair
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === '-market'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === 'market'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div
+                class="flex items-center cursor-pointer col-span-2"
+                (click)="sortBy('positionValueUsd')"
+            >
+                Position Value / P&L
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === 'positionValueUsd'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === '-positionValueUsd'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div
+                class="flex items-center cursor-pointer col-span-2"
+                (click)="sortBy('currentPrice')"
+            >
+                Current Price / Liq.
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === 'currentPrice'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === '-currentPrice'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div class="flex items-center cursor-pointer col-span-2" (click)="sortBy('leverage')">
+                Leverage / APR
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === 'leverage'">
+                    arrow_upward
+                </mat-icon>
+
+                <mat-icon class="small ml-1" *ngIf="(sortBy$ | async) === '-leverage'">
+                    arrow_downward
+                </mat-icon>
+            </div>
+
+            <div class="flex col-span-2"></div>
+        </div>
+
+        <div
+            *ngFor="let position of positionsPaginated$ | async"
+            class="bordered-block bordered-block--internal grid grid-cols-11 my-4"
+        >
+            <div class="flex items-center pl-4 py-2 col-span-3">
+                <app-icon-pair-platform
+                    [supplyAsset]="position.supplyMarket.assetAddress"
+                    [supplyAssetName]="position.supplyMarket.assetSymbol"
+                    [borrowAsset]="position.borrowMarket.assetAddress"
+                    [borrowAssetName]="position.borrowMarket.assetSymbol"
+                    [platformName]="position.supplyMarket.platform.name"
+                ></app-icon-pair-platform>
+            </div>
+
+            <div class="col-span-2 flex flex-col items-start justify-center text-base">
+                <div class="flex mb-2 cursor-pointer has-tooltip">
+                    {{ position.positionValue | formatValue }}
+                    {{ position.supplyTokenAddress | assetSymbol }}
+
+                    <div class="tooltip below">${{ position.positionValueUsd | formatValue }}</div>
+                </div>
+
+                <div
+                    *ngIf="position.positionValueUsd > 0.5"
+                    class="flex cursor-pointer has-tooltip"
+                    [class.text-green-600]="position.pnl >= 0"
+                    [class.text-red-600]="position.pnl < 0"
+                >
+                    {{ position.pnl || 0 | formatValue }}%
+
+                    <div class="tooltip">
+                        <div class="flex">
+                            <div class="w-32 mr-4">Principal Value:</div>
+
+                            <div class="flex grow">
+                                <span class="font-semibold mr-1">{{
+                                    position.principalValue | formatValue
+                                }}</span>
+                                {{ position.supplyTokenAddress | assetSymbol }}
+                                <span class="font-semibold"
+                                    >(${{ position.principalValueUsd | formatValue }})</span
+                                >
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="w-32 mr-4">Current Value:</div>
+
+                            <div class="flex grow">
+                                <span class="font-semibold mr-1">{{
+                                    position.positionValue | formatValue
+                                }}</span>
+                                {{ position.supplyTokenAddress | assetSymbol }}
+                                <span class="font-semibold"
+                                    >(${{ position.positionValueUsd | formatValue }})</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-2 flex flex-col items-start justify-center text-base">
+                <div
+                    *ngIf="position.positionValueUsd > 0.5"
+                    class="flex mb-2 cursor-pointer has-tooltip"
+                >
+                    {{
+                        position.currentPrice
+                            | formatExchangeRate
+                                : (position.supplyTokenAddress | assetSymbol)
+                                : (position.borrowTokenAddress | assetSymbol)
+                    }}
+
+                    <div class="tooltip w-48">
+                        <div class="flex">
+                            <div class="w-32">{{ position.borrowMarket.assetSymbol }}:</div>
+
+                            <div class="font-bold">
+                                {{ position.borrowMarket.assetUsdValue | currency }}
+                            </div>
+                        </div>
+
+                        <div class="flex">
+                            <div class="w-32">{{ position.supplyMarket.assetSymbol }}:</div>
+
+                            <div class="font-bold">
+                                {{ position.supplyMarket.assetUsdValue | currency }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    *ngIf="
+                        position.positionValueUsd > 0.5 &&
+                        position.borrowAmountUsd > 0 &&
+                        position.supplyTokenAddress.toLowerCase() !==
+                            position.borrowTokenAddress.toLocaleLowerCase()
+                    "
+                    class="flex w-full pr-8"
+                >
+                    <app-borrow-limit
+                        [position]="position"
+                        [tooltipPosition]="'right-center'"
+                    ></app-borrow-limit>
+                </div>
+            </div>
+
+            <div class="col-span-2 flex flex-col items-start justify-center text-base">
+                <div *ngIf="position.positionValueUsd > 0.5" class="flex mb-2">
+                    {{ position.leverage | formatValue }}x
+                </div>
+
+                <div
+                    *ngIf="position.positionValueUsd > 0.5"
+                    class="flex cursor-pointer has-tooltip"
+                >
+                    {{ position.apr | formatValue }}%
+
+                    <div class="tooltip" *ngIf="position.foldingMarket">
+                        <app-apr-tooltip
+                            [foldingMarket]="position.foldingMarket"
+                            [leverage]="position.leverage"
+                        ></app-apr-tooltip>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-span-2 flex items-center">
+                <div class="w-full mx-2">
+                    <a [routerLink]="['/position', { positionAddress: position.positionAddress }]">
+                        <button mat-flat-button class="primary w-full">View Position</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="block pb-1"></div>
+    </div>
+</div>
+
+<div *ngIf="(positions$ | async)?.length" class="col-span-12 flex">
+    <mat-checkbox
+        class="opacity-50"
+        [checked]="showClosed$ | async"
+        (change)="showClosed$.next(!showClosed$.getValue())"
+    >
+        Show Closed Positions
+    </mat-checkbox>
+
+    <div class="flex-grow"></div>
+
+    <app-paginator
+        *ngIf="
+            (showClosed$ | async)
+                ? (positions$ | async)?.length > 5
+                : (openPositions$ | async)?.length > 5
+        "
+        [length]="
+            (showClosed$ | async) ? (positions$ | async)?.length : (openPositions$ | async)?.length
+        "
+        [page]="page$ | async"
+        (pageChange)="page$.next($event)"
+        [itemsPerPage]="itemsPerPage$ | async"
+        (itemsPerPageChange)="itemsPerPage$.next($event)"
+    ></app-paginator>
+</div>
+
+<div
+    *ngIf="(positionsLoading$ | async) && foldingService.error$ | async"
+    class="flex items-center justify-center"
+>
+    <span class="text-4xl text-center">
+        {{ foldingService.error$ | async }}
+    </span>
+</div>
+
+<ng-template #positionsLoading>
+    <div class="py-16">
+        <mat-progress-spinner
+            class="mx-auto my-8"
+            color="accent"
+            mode="indeterminate"
+        ></mat-progress-spinner>
+    </div>
+</ng-template>

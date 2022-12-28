@@ -1,0 +1,84 @@
+<div
+    *ngIf="
+        (type === 'stake' && balance) || (type === 'unstake' && balance && rewards);
+        else loading
+    "
+>
+    <div class="app-input flex relative mt-4 mb-2">
+        <app-big-number-input
+            [(value)]="amount"
+            [decimals]="18"
+            [placeHolder]="'Enter amount'"
+            [textAlign]="'center'"
+        >
+        </app-big-number-input>
+
+        <ng-container *ngIf="type === 'unstake'">
+            <small class="button-max text-xs absolute left-0 -top-6">
+                <span>Rewards:</span> {{ userRewards }} FODL
+            </small>
+        </ng-container>
+
+        <small class="button-max text-xs absolute right-0 -top-6" (click)="setMax(balance)">
+            <span>{{ type === 'stake' ? 'Max' : 'Staked' }}:</span> {{ userBalance }}
+        </small>
+    </div>
+
+    <div *ngIf="!isAmountValid" class="flex mb-3 mx-2 text-red-400">
+        <mat-icon class="text-red-400 mr-1"> error </mat-icon>
+        <p class="text-sm leading-6">
+            {{ errorText }}
+        </p>
+    </div>
+
+    <div class="flex" [ngClass]="type === 'stake' ? 'justify-center' : 'justify-between'">
+        <ng-container *ngIf="type === 'stake'; else unstakeButtons">
+            <button
+                [disabled]="isStakeUnstakeButtonDisabled()"
+                mat-button
+                class="secondary w-32"
+                (click)="doAction('stake')"
+            >
+                Stake
+            </button>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #unstakeButtons>
+    <button
+        [disabled]="isStakeUnstakeButtonDisabled()"
+        mat-button
+        class="secondary w-32"
+        (click)="doAction('unstake')"
+    >
+        Unstake
+    </button>
+
+    <button
+        [disabled]="isClaimButtonDisabled()"
+        mat-button
+        class="secondary w-32"
+        (click)="doAction('claim')"
+    >
+        Claim Rewards
+    </button>
+
+    <button
+        [disabled]="isExitButtonDisabled()"
+        mat-button
+        class="secondary w-32"
+        (click)="doAction('exit')"
+    >
+        Exit
+    </button>
+</ng-template>
+
+<ng-template #loading>
+    <mat-progress-spinner
+        class="mx-auto my-9"
+        color="accent"
+        mode="indeterminate"
+        diameter="50"
+    ></mat-progress-spinner>
+</ng-template>

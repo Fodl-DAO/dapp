@@ -1,0 +1,77 @@
+<div class="flex items-start">
+    <div
+        class="
+            w-1/2
+            bordered-block bordered-block--semi-transparent bordered-block--no-padding
+            mr-2
+        "
+    >
+        <div class="flex bg-default rounded-t-lg border-b-pink h-20">
+            <div class="flex items-center px-6">
+                <button mat-icon-button (click)="goBack()">
+                    <mat-icon class="large">west</mat-icon>
+                </button>
+            </div>
+
+            <div class="flex grow text-lg font-bold justify-center items-center">
+                {{ getFormTitle() }}
+            </div>
+
+            <div class="flex items-center px-6">
+                <ng-container *ngIf="allowStopLoss && position && !edit; else onlySettings">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <mat-icon class="large">settings</mat-icon>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="openSettings()">Slippage</button>
+
+                        <button mat-menu-item (click)="openStopLoss()">Stop Loss</button>
+                    </mat-menu>
+                </ng-container>
+
+                <ng-template #onlySettings>
+                    <button mat-icon-button (click)="openSettings()">
+                        <mat-icon class="large">settings</mat-icon>
+                    </button>
+                </ng-template>
+            </div>
+        </div>
+
+        <app-position-form
+            class="m-4"
+            [position]="position"
+            [edit]="edit"
+            (simulatedPositionDetails)="positionDetails = $event"
+        ></app-position-form>
+    </div>
+
+    <div class="flex flex-col w-1/2 ml-2">
+        <div
+            class="bordered-block bordered-block--semi-transparent bordered-block--no-padding"
+            [class.mb-4]="position.supplyMarket && position.borrowMarket"
+        >
+            <app-asset-graph
+                *ngIf="position.supplyMarket && position.borrowMarket"
+                [position]="position"
+            ></app-asset-graph>
+        </div>
+
+        <div class="bordered-block bordered-block--semi-transparent overflow-auto">
+            <div class="py-16" *ngIf="!positionDetails">
+                <mat-progress-spinner
+                    class="mx-auto my-8"
+                    color="accent"
+                    mode="indeterminate"
+                ></mat-progress-spinner>
+            </div>
+
+            <app-position-details
+                *ngIf="positionDetails && position.supplyMarket && position.borrowMarket"
+                [edit]="!!edit"
+                [position]="position"
+                [positionDetails]="positionDetails"
+            ></app-position-details>
+        </div>
+    </div>
+</div>

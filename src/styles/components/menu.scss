@@ -1,0 +1,19 @@
+@import '../colors';
+@import '../variables';
+
+.mat-menu-panel {
+    @apply backdrop-blur-lg;
+
+    background-color: rgba($background-color, 0.4);   
+
+    button {
+        padding: 0;
+        text-align: center;
+        border-radius: 0 !important;
+        line-height: 1;
+    }
+}
+
+.mat-menu-content:not(:empty) {
+    padding: 0 !important;
+}

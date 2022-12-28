@@ -1,0 +1,16 @@
+{
+    "tabWidth": 4,
+    "useTab": true,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "bracketSpacing": true,
+    "overrides": [
+        {
+            "files": "src/**/*.html",
+            "options": {
+                "printWidth": 100
+            }
+        }
+    ]
+}
